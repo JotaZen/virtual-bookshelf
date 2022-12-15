@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import hashString from '../../utilities/hash/jenkinsHash';
 
 function App() {
   return (
@@ -17,6 +18,17 @@ function App() {
         >
           Learn React
         </a>
+        <p></p>
+        <input id='input'>
+        </input>
+        <button onClick={() => {
+          document.getElementById('texto').innerHTML = hashString(document.getElementById('input').value);
+
+        }}>Hash</button>
+        <p id='texto'>
+          Texto
+        </p>
+        <p> Fecha: {Date()}</p>
       </header>
     </div>
   );
