@@ -1,8 +1,9 @@
 # VSCode
 *.code-workspace
 
-# Binaries
 out/
+dist/
+build/
 
 # Test
 temp.*

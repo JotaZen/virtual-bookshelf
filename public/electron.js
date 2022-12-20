@@ -16,22 +16,22 @@ let mainWindow
 let newWindow
 
 const createWindow = () => {
-  const startUrl = process.env.ELECTRON_START_URL || url.format({
-    pathname: path.join(__dirname, '../index.html'),
-    protocol: 'file:',
-    slashes: true,
-  })  
-
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600
   })
-    mainWindow.loadURL(startUrl)
 
-    Menu.setApplicationMenu(Menu.buildFromTemplate(templateMenu))
-  }
+  const startUrl = process.env.ELECTRON_START_URL || url.format({
+    pathname: path.join(__dirname, '../build/index.html'),
+    protocol: 'file:',
+    slashes: true,
+  });
+  
+  mainWindow.loadURL(startUrl)
+  Menu.setApplicationMenu(Menu.buildFromTemplate(templateMenu))
+}
 
-  app.whenReady().then(() => {
+app.whenReady().then(() => {
   createWindow()
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
