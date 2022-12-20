@@ -11,7 +11,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron": "electron .",
+    "electron": "set ELECTRON_START_URL=http://localhost:3000 && electron .",
     "forge-start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make"
@@ -42,10 +42,12 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "sqlite3": "^5.1.4",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
     "electron": "^22.0.0",
+    "electron-builder": "^23.6.0",
     "electron-is-dev": "^2.0.0"
   }
 }

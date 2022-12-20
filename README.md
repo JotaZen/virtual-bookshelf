@@ -4,7 +4,9 @@
 
 ## To do:
 
-• Definir modelo de guardado de información 
+• Definir modelo de guardado de información
+
+• Definir entorno de desarrollo y producción
 
 • Grid de los últimos libros añadidos
 
