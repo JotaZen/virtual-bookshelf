@@ -1,6 +1,6 @@
-import logo from './logo.svg';
-import './App.css';
-import hashString from '../../utilities/hash/jenkinsHash';
+import logo from './logo.svg'
+import './App.css'
+import hashString from '../../utilities/hash/jenkinsHash'
 
 function App() {
   return (
@@ -19,19 +19,20 @@ function App() {
           Learn React
         </a>
         <p></p>
-        <input id='input'>
+        <input id='input-test'>
         </input>
         <button onClick={() => {
-          document.getElementById('texto').innerHTML = hashString(document.getElementById('input').value);
+          document.getElementById('texto-prueba').innerHTML = hashString(document.getElementById('input-test').value);
 
         }}>Hash</button>
-        <p id='texto'>
+        <p id='texto-prueba'>
           Texto
         </p>
         <p> Fecha: {Date()}</p>
       </header>
+    
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

@@ -1,0 +1,16 @@
+.AddBook {
+    background-color: beige;
+}
+
+.book_input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: nowrap;
+}
+
+.book_input + button{
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+}

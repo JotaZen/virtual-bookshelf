@@ -1,15 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './components/default/App';
-import reportWebVitals from './utilities/ReactUtils/reportWebVitals';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.css'
+import App from './components/default/App'
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import GridBook from './components/BookGrid/BookGrid'
+import AddBook from './components/AddBook/AddBook'
+
+const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
-    <App />
+    <div class='book_grid'>
+      <AddBook />
+      <GridBook />
+    </div>
   </React.StrictMode>
-);
-
-// To log performance (for example: reportWebVitals(console.log))
-reportWebVitals();
+)

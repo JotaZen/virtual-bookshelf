@@ -5,20 +5,22 @@ const path = require('path')
 
 if (process.env.NODE_ENV !== 'production') {
   require('electron-reload')(__dirname, {
+//    Crashing --
 //    electron: path.join(__dirname, '../node_modules', '.bin', 'electron')
-  })
+//
+})
 }
 
 //
-// Creación de pestañas principal y secundarias
+// Creación de pestaña principal
 //
-let mainWindow
-let newWindow
-
 const createWindow = () => {
-  const mainWindow = new BrowserWindow({
+  let mainWindow = new BrowserWindow({
     width: 800,
-    height: 600
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+    }
   })
 
   const startUrl = process.env.ELECTRON_START_URL || url.format({
@@ -29,10 +31,13 @@ const createWindow = () => {
   
   mainWindow.loadURL(startUrl)
   Menu.setApplicationMenu(Menu.buildFromTemplate(templateMenu))
+
+  mainWindow.on('close', () => {app.quit()})
 }
 
 app.whenReady().then(() => {
   createWindow()
+
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
@@ -64,12 +69,46 @@ const templateMenu = [
     }
   }
 ]
+// Developer Tools in Development Environment
+if (process.env.NODE_ENV !== 'production') {
+  templateMenu.push({
+    label: 'DevTools',
+    submenu: [
+      {
+        label: 'Show/Hide Dev Tools',
+        accelerator: process.platform == 'darwin' ? 'Comand+D' : 'Ctrl+D',
+        click(item, focusedWindow) {
+          focusedWindow.toggleDevTools();
+        }
+      },
+      {
+        role: 'reload'
+      }
+    ]
+  })
+}
 
+//
+// Ventana secundaria
+//
+let newWindow
 function createNewWindow() {
-    newWindow = new BrowserWindow({
-    width: 400,
-    height: 330,
-    title: 'Window'
-    }
-  )
+  if (newWindow) {
+    return
+  } 
+  newWindow = new BrowserWindow({
+  width: 400,
+  height: 330,
+  title: '...'
+  })
+
+  newWindow.setMenu(null)
+  newWindow.loadURL(url.format({
+    pathname: path.join(__dirname, process.env.NODE_ENV !== 'production' ? 'views/test.html' : '../build/views/test.html'),
+    protocol: 'file:',
+    slashes: true,
+  }))
+
+  newWindow.on('close', () => {newWindow = null})
+  
 }
