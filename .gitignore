@@ -4,6 +4,7 @@
 out/
 dist/
 build/
+assets/
 
 # Test
 temp.*

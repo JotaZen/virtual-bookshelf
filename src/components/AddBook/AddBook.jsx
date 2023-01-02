@@ -1,36 +1,145 @@
-import React, { useState, useEffect } from 'react'
+import React, { Component } from 'react'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Modal from 'react-bootstrap/Modal'
+import Nav from 'react-bootstrap/Nav'
 import './AddBook.css'
 
-function AddBook() {
-  return(
-    <div className='AddBook'>
-      <p className='book_input'>Título</p>
-      <input className='book_input' id='bi_title'></input>
+class AddBook extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      show: false,
+      formData: {
+        titulo: "",
+        // autor: "",
+        // ano_edicion: 0,
+        // fecha_ingreso: "00\/00\/0000",
+        // hora_ingreso: "00:00:00",
+        // editorial: "",
+        // estado: "",
+        // descripcion: ""
+      },
+      formIsValid: false
+    }
+  }
+  handleShow = () => {
+    this.setState({ show:true })
+  }
+  handleClose = () => {
+    this.setState({ show:false })
+  }
 
+  handleChange = (event) => {
+    this.state.formData[event.target.name] = event.target.value
+    this.validateForm()
+  }
 
-      <p className='book_input'>Autor</p>
-      <input className='book_input' id='bi_author'></input>
+  validateForm = () => {
+    if (this.state.formData.titulo == '') {
+      this.setState({ formIsValid: false })
+      return
+    }
+    this.setState({ formIsValid: true })
+  }
 
+  addBook = () => {
+    if (!this.state.formIsValid) {return}
+    window.electron.CRUD.retrieveBooks(null).then(booksData => {
+      const ids = booksData.map( book => book.id ) 
+      this.state.formData.id = ids.reduce((max, val) => max > val ? max : val) + 1
+      window.electron.CRUD.saveBook(this.state.formData)
+    })  
+  }
 
-      <p className='book_input'>Edición</p>
-      <input className='book_input' id='bi_edition'></input>
+  render() {
+    const { formIsValid, formData, show } = this.state
+    const handleChange = this.handleChange
+    const handleShow = this.handleShow
+    const handleClose = this.handleClose
+    const addBook = this.addBook
 
-
-      <p className='book_input'>Editorial</p>
-      <input className='book_input' id='bi_publisher'></input>
-
-
-      <p className='book_input'>Numeración</p>
-      <input className='book_input' id='bi_numeration'></input>
-
-
-      <p className='book_input'>Imagen</p>
-      <input className='book_input' id='bi_image'></input>
-
-      <button className='book_input'>Añadir</button>
-   </div>
-  )
+    return (
+      <>
+        <Nav.Link onClick={handleShow} className='add_book'>Ingresar Libro</Nav.Link>
+  
+        <Modal show={show} onHide={handleClose} dialogClassName="modal-90w">
+          <Modal.Header closeButton>
+            <Modal.Title>Ingresar Libro</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Label>Título</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Ingrese un título"
+                  autoFocus
+                  required
+                  name='titulo'
+                  onChange={handleChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Label>Autor</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Ingrese un Autor"
+                  name='autor'
+                  onChange={handleChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Label>Editorial</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Ingrese una Editorial"
+                  name='editorial'
+                  onChange={handleChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Label>Año de edición</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Ingrese el año de edición"
+                  name='ano_edicion'
+                  onChange={handleChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                <Form.Label>Descripción</Form.Label>
+                <Form.Control as="textarea" rows={3} 
+                  name='descipcion'
+                  placeholder='...'
+                  value={formData.descripcion} 
+                  onChange={handleChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Label>Portada</Form.Label>
+                <Form.Control
+                  type="file"
+                  placeholder=""
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Cerrar
+            </Button>       
+            <Button variant="primary" onClick={()=> {
+              addBook() 
+              handleClose()}} 
+              disabled={!formIsValid}>
+              Guardar
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </>
+    )
+  } 
 }
-
 
 export default AddBook

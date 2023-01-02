@@ -1,0 +1,6 @@
+.nav_bar {
+    position: fixed;
+    width: 100vw;
+    background-color: rebeccapurple;
+    z-index: 50;
+}

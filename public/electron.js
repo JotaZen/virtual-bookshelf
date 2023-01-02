@@ -1,25 +1,29 @@
-const { app, BrowserWindow, Menu } = require('electron')
+const { app, BrowserWindow, Menu, ipcMain, Notification } = require('electron')
 
 const url = require('url')
 const path = require('path')
 
-if (process.env.NODE_ENV !== 'production') {
-  require('electron-reload')(__dirname, {
-//    Crashing --
-//    electron: path.join(__dirname, '../node_modules', '.bin', 'electron')
-//
-})
-}
+// Funciones del CRUD
+const { retrieveBooks } = require('./electron/CRUDJson/retrieveBooks')
+const { changeBook } = require('./electron/CRUDJson/test_changeBook')
+const { saveBook } = require('./electron/CRUDJson/saveBook.js')
 
 //
 // Creación de pestaña principal
 //
+let mainWindow
 const createWindow = () => {
-  let mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    backgroundColor: '#8a2be2',
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: false,
+      worldSafeExecuteJavaScript: true,
+      contextIsolation: true,
+      sandbox: false,
+      webSecurity: app.isPackaged ? true : false,
+      preload: path.join(__dirname, 'preload.js')
     }
   })
 
@@ -28,7 +32,7 @@ const createWindow = () => {
     protocol: 'file:',
     slashes: true,
   });
-  
+  mainWindow.setTitle('Raúl Espinoza')
   mainWindow.loadURL(startUrl)
   Menu.setApplicationMenu(Menu.buildFromTemplate(templateMenu))
 
@@ -37,46 +41,23 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
   createWindow()
-
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
   app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit()
+    app.quit()
   })
 })
 
-//
-// Etiquetas menú superior
-//
-const templateMenu = [
-  {
-    label: 'Data',
-    submenu: [
-      {
-        label: 'New baook',
-        accelerator: 'Ctrl+N',
-        click() {
-
-        }
-      }
-    ]
-  },
-  {
-    label: 'Nueva Pestaña',
-    click() {
-      createNewWindow()
-    }
-  }
-]
+const templateMenu = []
 // Developer Tools in Development Environment
-if (process.env.NODE_ENV !== 'production') {
+if (!app.isPackaged) {
   templateMenu.push({
     label: 'DevTools',
     submenu: [
       {
         label: 'Show/Hide Dev Tools',
-        accelerator: process.platform == 'darwin' ? 'Comand+D' : 'Ctrl+D',
+        accelerator: 'Ctrl+D',
         click(item, focusedWindow) {
           focusedWindow.toggleDevTools();
         }
@@ -104,11 +85,36 @@ function createNewWindow() {
 
   newWindow.setMenu(null)
   newWindow.loadURL(url.format({
-    pathname: path.join(__dirname, process.env.NODE_ENV !== 'production' ? 'views/test.html' : '../build/views/test.html'),
+    pathname: path.join(__dirname, 'views/test.html'),
     protocol: 'file:',
     slashes: true,
   }))
 
   newWindow.on('close', () => {newWindow = null})
-  
 }
+
+//
+//  IPC
+//  Save Data
+//
+//
+const mainPath = path.join(app.getAppPath(), app.isPackaged ? '..' : '')
+
+ipcMain.handle('retrieveBooks', (event, filterCallback) => {
+  const booksPath = path.join(mainPath, 'assets', 'data', 'libros.json')
+  const books_data = retrieveBooks(booksPath, filterCallback)
+  return books_data
+})
+
+ipcMain.on('saveBook', (event, newBook) => {
+  saveBook(path.join(mainPath, 'assets', 'data', 'libros.json'), newBook)
+})
+
+ipcMain.handle('getMainPath', (event) => {
+  return mainPath
+})
+
+ipcMain.handle('getImgPath', (event, folder) => {
+  return path.join(mainPath, "assets", "img", folder)
+})
+

@@ -1,0 +1,99 @@
+.book_grid_menu {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+.book_grid_container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: repeat(5, 11rem);
+  grid-gap: 10px;
+}
+.book_grid_container * {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: transparent;
+}
+div.book_grid_item:hover{
+  transition: transform .1s;
+  cursor: pointer;
+  transform: scale(1.05);
+  z-index: 20;
+}
+.card_body {
+  padding-top: 5px;
+  background-color: rgb(255, 255, 255);
+}
+.card_header {
+  padding: 0px;
+}
+.card_title {
+padding-top: 5px;
+}
+.card_images{
+  object-fit: contain;
+  width: 10.9rem;
+  height: 150px;
+}
+.top_container{
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+}
+
+.navigation_buttons, .navigation_buttons_fix{
+  display: flex;
+  gap: 5px;  
+}
+.navigation_buttons Button{
+  margin-top: 5px;
+  background-color: #8a2be2;
+  border: 0;
+  width: 40px;
+  height: 40px;
+}
+
+.navigation_buttons_fix Button{
+  margin-top: 5px;
+  background-color: #8a2be2;
+  border: 0;
+  width: auto;
+  height: 40px;
+}
+
+#current_page_btn {
+  background-color: blue;
+} 
+
+.search_input{
+  margin-top: 5px;
+  display: flex;
+  flex-flow: row nowrap;
+}
+#search_box{
+  max-width: 300px;
+}
+.image_small{
+  margin-right: 15px;
+  max-width: 40px;
+  max-height: 40px;
+  transform: rotateY(180deg);
+}
+
+@media (max-width: 1060px) {
+  .book_grid_container {
+    grid-template-columns: repeat(4, 11rem);
+  }
+}
+@media (max-width: 860px) {
+  .book_grid_container {
+    grid-template-columns: repeat(3, 11rem);
+  }
+}
+@media (max-width: 660px) {
+  .book_grid_container {
+    grid-template-columns: repeat(2, 11rem);
+  }
+}
