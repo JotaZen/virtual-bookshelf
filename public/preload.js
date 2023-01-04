@@ -22,7 +22,7 @@ contextBridge.exposeInMainWorld('electron', {
     }
   },
   CRUD: {
-    async retrieveBooks(filterCallback,test) {
+    async retrieveBooks(filterCallback) {
       let data = await ipcRenderer.invoke('retrieveBooks',filterCallback)
       return data
     },

@@ -7,14 +7,14 @@ import App from './components/default/App'
 import BooksGrid from './layouts/BookGrid/GridBook'
 import Header from './layouts/Header/Header'
 
-
+const xd = (f) => {console.log(f)}
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
-  <React.StrictMode>
+  <>
     <Header/>
     <div className='margin_body'></div>
-    <BooksGrid/>
+    <BooksGrid xd={xd}/>
     <div style={{color:"white", dislay: "flex"}}>
     </div>
-  </React.StrictMode>
+  </>
 )

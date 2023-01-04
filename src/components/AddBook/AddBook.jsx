@@ -11,14 +11,7 @@ class AddBook extends React.Component {
     this.state = {
       show: false,
       formData: {
-        titulo: "",
-        // autor: "",
-        // ano_edicion: 0,
-        // fecha_ingreso: "00\/00\/0000",
-        // hora_ingreso: "00:00:00",
-        // editorial: "",
-        // estado: "",
-        // descripcion: ""
+        titulo: ""
       },
       formIsValid: false
     }
@@ -45,7 +38,9 @@ class AddBook extends React.Component {
 
   addBook = () => {
     if (!this.state.formIsValid) {return}
-    window.electron.CRUD.retrieveBooks(null).then(booksData => {
+    const dateNow = 
+    
+    window.electron.CRUD.retrieveBooks().then(booksData => {
       const ids = booksData.map( book => book.id ) 
       this.state.formData.id = ids.reduce((max, val) => max > val ? max : val) + 1
       window.electron.CRUD.saveBook(this.state.formData)
@@ -69,7 +64,7 @@ class AddBook extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Group className="mb-3">
                 <Form.Label>Título</Form.Label>
                 <Form.Control
                   type="text"
@@ -80,7 +75,7 @@ class AddBook extends React.Component {
                   onChange={handleChange}
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Group className="mb-3">
                 <Form.Label>Autor</Form.Label>
                 <Form.Control
                   type="text"
@@ -89,7 +84,7 @@ class AddBook extends React.Component {
                   onChange={handleChange}
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Group className="mb-3">
                 <Form.Label>Editorial</Form.Label>
                 <Form.Control
                   type="text"
@@ -98,7 +93,7 @@ class AddBook extends React.Component {
                   onChange={handleChange}
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Group className="mb-3">
                 <Form.Label>Año de edición</Form.Label>
                 <Form.Control
                   type="number"
@@ -107,7 +102,7 @@ class AddBook extends React.Component {
                   onChange={handleChange}
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+              <Form.Group className="mb-3">
                 <Form.Label>Descripción</Form.Label>
                 <Form.Control as="textarea" rows={3} 
                   name='descipcion'
@@ -116,7 +111,7 @@ class AddBook extends React.Component {
                   onChange={handleChange}
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Group className="mb-3">
                 <Form.Label>Portada</Form.Label>
                 <Form.Control
                   type="file"

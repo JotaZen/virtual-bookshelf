@@ -8,6 +8,8 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import CardGroup from 'react-bootstrap/CardGroup'
 import Form from 'react-bootstrap/Form'
 
+import ShowBook from '../../components/ShowBook/ShowBook'
+
 class BooksGrid extends React.Component {
   constructor(props) {
     super(props)
@@ -17,14 +19,16 @@ class BooksGrid extends React.Component {
       imgPath: null,
       maxItemsPage: 20,
       maxTitleLength: 40,
-      searchTerm: ''
+      searchTerm: '',
+      showBook: false,
+      selectedBookId: null
     }
   }
   reversa = () => {
     this.setState({ booksData: this.state.booksData.reverse() })
   }
   componentDidMount() {
-    window.electron.CRUD.retrieveBooks(null).then(booksData => {
+    window.electron.CRUD.retrieveBooks().then(booksData => {
       window.electron.main.getImgPath().then(imgPath => {
         this.setState({ imgPath, booksData: booksData.reverse() })
       })
@@ -40,17 +44,24 @@ class BooksGrid extends React.Component {
     this.setState({ searchTerm: '' })
   }
   reload = () => {
-    window.electron.CRUD.retrieveBooks(null).then(booksData => {
+    window.electron.CRUD.retrieveBooks().then(booksData => {
       window.electron.main.getImgPath().then(imgPath => {
         this.setState({ imgPath, booksData: booksData.reverse() })
       })
     })
   }
+  loadData = (id) => {
+    this.setState({ showBook: true, selectedBookId: id})
+  }
+  unloadData = () => {
+    this.setState({ showBook: false, selectedBookId: null })
+  }
 
   render() {
     const { currentPage, maxTitleLength, imgPath, searchTerm } = this.state
-    const handleFormChange = this.handleFormChange
     let { booksData } = this.state
+    const handleFormChange = this.handleFormChange
+  
     if (booksData === null) {
       return <p>Cargando libros...</p>
     } else if (searchTerm !== '') {
@@ -117,9 +128,19 @@ class BooksGrid extends React.Component {
           </div>
         </div>
 
+        {this.state.showBook ? <ShowBook 
+          show={this.state.showBook}
+          onClose={this.unloadData}
+          id={this.state.selectedBookId}
+          /> : null}
+
         <div className='book_grid_container'>
-          {currentPageBooks.map(book => (
-            <Card className='book_grid_item' key={book.id} onClick={()=>{window.electron.notificationApi.ping()}}
+          {currentPageBooks.map(book => ( 
+            <Card className='book_grid_item' key={book.id} onClick={
+              () => {
+                this.loadData(book.id)
+              } 
+            }
             border='secondary'>
               <Card.Img variant="top" src={path.join(imgPath, 'books', book.image_src || 'default.png')} 
               className='card_images'/>                 
@@ -163,12 +184,3 @@ class BooksGrid extends React.Component {
 }
 
 export default BooksGrid
-
-{/* <div className='book_grid_container'>
-{currentPageBooks.map(book => (
-  <div className='book_grid_item' key={book.id} onClick={()=>{console.log(`Presionaste: ${book.titulo}`)}}>
-    <h2>{book.titulo}</h2>
-    <p>{book.ano_edicion}</p>
-  </div>
-))}
-</div> */}

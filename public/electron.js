@@ -100,9 +100,9 @@ function createNewWindow() {
 //
 const mainPath = path.join(app.getAppPath(), app.isPackaged ? '..' : '')
 
-ipcMain.handle('retrieveBooks', (event, filterCallback) => {
+ipcMain.handle('retrieveBooks', (event) => {
   const booksPath = path.join(mainPath, 'assets', 'data', 'libros.json')
-  const books_data = retrieveBooks(booksPath, filterCallback)
+  const books_data = retrieveBooks(booksPath)
   return books_data
 })
 
