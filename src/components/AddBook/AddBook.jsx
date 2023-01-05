@@ -3,16 +3,18 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
 import Nav from 'react-bootstrap/Nav'
+import path from 'path-browserify'
 import './AddBook.css'
 
 class AddBook extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      show: false,
+      show: true,
       formData: {
         titulo: ""
       },
+      imagePath: "",
       formIsValid: false
     }
   }
@@ -28,37 +30,54 @@ class AddBook extends React.Component {
     this.validateForm()
   }
 
+  handleImgChange = (event) => {
+    this.state.imagePath = event.target.files[0].path
+  }
+
   validateForm = () => {
     if (this.state.formData.titulo == '') {
       this.setState({ formIsValid: false })
       return
+    } else if (this.state.formData.image) {
+      console.log('huh')
     }
+
+
     this.setState({ formIsValid: true })
   }
 
-  addBook = () => {
+  addBook = async () => {
     if (!this.state.formIsValid) {return}
-    const dateNow = 
+    const dateNow = 1
+
     
+    
+
     window.electron.CRUD.retrieveBooks().then(booksData => {
       const ids = booksData.map( book => book.id ) 
       this.state.formData.id = ids.reduce((max, val) => max > val ? max : val) + 1
-      window.electron.CRUD.saveBook(this.state.formData)
     })  
+    const newImagePath = path.join(
+      await window.electron.main.getImgPath(), 
+      'books',
+      `${this.state.formData.id}.png`
+    )
+    this.state.formData.image_src = newImagePath.split('/').slice(-1)[0]
+    
+    window.electron.CRUD.saveBook(this.state.formData)
+    window.electron.CRUD.saveBookImg(this.state.imagePath, newImagePath)
+
+    window.electron.main.reload()  
   }
 
   render() {
     const { formIsValid, formData, show } = this.state
-    const handleChange = this.handleChange
-    const handleShow = this.handleShow
-    const handleClose = this.handleClose
-    const addBook = this.addBook
 
     return (
       <>
-        <Nav.Link onClick={handleShow} className='add_book'>Ingresar Libro</Nav.Link>
+        <Nav.Link onClick={this.handleChange} className='add_book'>Ingresar Libro</Nav.Link>
   
-        <Modal show={show} onHide={handleClose} dialogClassName="modal-90w">
+        <Modal show={show} onHide={this.handleClose} dialogClassName="modal-90w">
           <Modal.Header closeButton>
             <Modal.Title>Ingresar Libro</Modal.Title>
           </Modal.Header>
@@ -72,7 +91,7 @@ class AddBook extends React.Component {
                   autoFocus
                   required
                   name='titulo'
-                  onChange={handleChange}
+                  onChange={this.handleChange}
                 />
               </Form.Group>
               <Form.Group className="mb-3">
@@ -81,7 +100,7 @@ class AddBook extends React.Component {
                   type="text"
                   placeholder="Ingrese un Autor"
                   name='autor'
-                  onChange={handleChange}
+                  onChange={this.handleChange}
                 />
               </Form.Group>
               <Form.Group className="mb-3">
@@ -90,7 +109,7 @@ class AddBook extends React.Component {
                   type="text"
                   placeholder="Ingrese una Editorial"
                   name='editorial'
-                  onChange={handleChange}
+                  onChange={this.handleChange}
                 />
               </Form.Group>
               <Form.Group className="mb-3">
@@ -99,7 +118,7 @@ class AddBook extends React.Component {
                   type="number"
                   placeholder="Ingrese el año de edición"
                   name='ano_edicion'
-                  onChange={handleChange}
+                  onChange={this.handleChange}
                 />
               </Form.Group>
               <Form.Group className="mb-3">
@@ -108,7 +127,7 @@ class AddBook extends React.Component {
                   name='descipcion'
                   placeholder='...'
                   value={formData.descripcion} 
-                  onChange={handleChange}
+                  onChange={this.handleChange}
                 />
               </Form.Group>
               <Form.Group className="mb-3">
@@ -116,16 +135,18 @@ class AddBook extends React.Component {
                 <Form.Control
                   type="file"
                   placeholder=""
+                  onChange={this.handleImgChange}
+                  accept='.jpg,.jpeg,.png,.jfif,.gif,.webp'
                 />
               </Form.Group>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button variant="secondary" onClick={this.handleClose}>
               Cerrar
             </Button>       
             <Button variant="primary" onClick={()=> {
-              addBook() 
+              this.addBook() 
               handleClose()}} 
               disabled={!formIsValid}>
               Guardar

@@ -7,6 +7,7 @@ const path = require('path')
 const { retrieveBooks } = require('./electron/CRUDJson/retrieveBooks')
 const { changeBook } = require('./electron/CRUDJson/test_changeBook')
 const { saveBook } = require('./electron/CRUDJson/saveBook.js')
+const { saveImage } = require('./electron/CRUDJson/saveImage.js')
 
 //
 // Creación de pestaña principal
@@ -100,6 +101,10 @@ function createNewWindow() {
 //
 const mainPath = path.join(app.getAppPath(), app.isPackaged ? '..' : '')
 
+ipcMain.on('reload', (event) => {
+  mainWindow.webContents.reload()
+})
+
 ipcMain.handle('retrieveBooks', (event) => {
   const booksPath = path.join(mainPath, 'assets', 'data', 'libros.json')
   const books_data = retrieveBooks(booksPath)
@@ -109,7 +114,9 @@ ipcMain.handle('retrieveBooks', (event) => {
 ipcMain.on('saveBook', (event, newBook) => {
   saveBook(path.join(mainPath, 'assets', 'data', 'libros.json'), newBook)
 })
-
+ipcMain.on('saveBookImg', (event, newImgPath, copyPath) => {
+  saveImage(newImgPath, copyPath)
+})
 ipcMain.handle('getMainPath', (event) => {
   return mainPath
 })

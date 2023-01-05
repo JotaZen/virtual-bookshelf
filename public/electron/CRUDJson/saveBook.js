@@ -1,5 +1,5 @@
 const { Notification } = require('electron')
-const fs = require("fs");
+const fs = require("fs")
 const path = require('path')  
 
 async function saveBook(dataPath, newBook){

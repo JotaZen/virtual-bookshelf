@@ -13,10 +13,7 @@ class Header extends React.Component {
     }
   }
 
-  componentDidMount() {
-    }
   render() {
-
     return (
       <Navbar variant="dark" className='nav_bar'>
         <Container>

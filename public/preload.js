@@ -11,6 +11,9 @@ contextBridge.exposeInMainWorld('electron', {
     async getImgPath(folder = "") {
       let img = await ipcRenderer.invoke('getImgPath',folder)
       return img
+    },
+    reload: () => {
+      ipcRenderer.send('reload')
     }
   },
   notificationApi: {
@@ -28,6 +31,9 @@ contextBridge.exposeInMainWorld('electron', {
     },
     saveBook: async (newBook) => {
       ipcRenderer.send('saveBook',newBook)
+    },
+    saveBookImg: async (newImgPath, copyPath) => {
+      ipcRenderer.send('saveBookImg',newImgPath, copyPath)
     }
   }
 })

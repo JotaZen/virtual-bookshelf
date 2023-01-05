@@ -27,10 +27,7 @@ class ShowBook extends React.Component {
     if (!this.state.show || this.state.bookData == null) {
       return null;
     }
-
     let { bookData } = this.state
-    console.log(bookData)
-
     return (
       <> 
         <Modal show={this.state.show} onHide={this.handleClose} dialogClassName="modal-90w">

@@ -60,7 +60,6 @@ class BooksGrid extends React.Component {
   render() {
     const { currentPage, maxTitleLength, imgPath, searchTerm } = this.state
     let { booksData } = this.state
-    const handleFormChange = this.handleFormChange
   
     if (booksData === null) {
       return <p>Cargando libros...</p>
@@ -101,7 +100,7 @@ class BooksGrid extends React.Component {
           <div className='search_input'>
               <img src={path.join(imgPath, 'misc', 'lupa.png')} className='image_small'/>
               <Form.Control type="text" placeholder="Buscar" 
-              id='search_box' value={searchTerm} onChange={handleFormChange}>
+              id='search_box' value={searchTerm} onChange={this.handleFormChange}>
               </Form.Control>
           </div>         
           <div className='navigation_buttons'>

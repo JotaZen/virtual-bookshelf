@@ -21,8 +21,8 @@
       "assets"
     ],
     "win": {
-     "icon": "build/icon.png"
-   }
+      "icon": "build/icon.png"
+    }
   },
   "eslintConfig": {
     "extends": [
