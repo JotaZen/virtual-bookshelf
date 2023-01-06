@@ -1,10 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import './index.css'
 
 import Main from './layouts/Main/Main'
-import Header from './layouts/Header/Header'
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 const Loading = (loadingDelayHidden = 0) => {

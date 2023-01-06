@@ -4,8 +4,6 @@ import path from 'path-browserify'
 
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
-import ListGroup from 'react-bootstrap/ListGroup'
-import CardGroup from 'react-bootstrap/CardGroup'
 import Form from 'react-bootstrap/Form'
 
 import ShowBook from '../../components/ShowBook/ShowBook'
@@ -72,6 +70,7 @@ class BooksGrid extends React.Component {
         .replace(/[\u0300-\u036f]/g,"").includes(searchTerm.toLowerCase())) ||  
           (book.autor && book.autor.toLowerCase().normalize('NFD')
         .replace(/[\u0300-\u036f]/g,"").includes(searchTerm.toLowerCase())) ||
+// eslint-disable-next-line
           (book.ano_edicion && book.ano_edicion == searchTerm) 
         ) 
         })
@@ -98,7 +97,7 @@ class BooksGrid extends React.Component {
       <div className='book_grid_menu'>
         <div className='top_container'>
           <div className='search_input'>
-              <img src={path.join(imgPath, 'misc', 'lupa.png')} className='image_small'/>
+              <img src={path.join(imgPath, 'misc', 'lupa.png')} className='image_small' alt='lupa'/>
               <Form.Control type="text" placeholder="Buscar" 
               id='search_box' value={searchTerm} onChange={this.handleFormChange}>
               </Form.Control>
@@ -112,12 +111,6 @@ class BooksGrid extends React.Component {
             ))}
           </div>
           <div className='navigation_buttons_fix'>
-            <Button variant="primary" onClick={() => {
-              this.handlePageChange(1)
-              this.removeSearchTerm()
-              this.reload()}} id='page_btn'>
-              Recargar
-            </Button>
             <Button variant="primary" onClick={() => this.handlePageChange(1)} id='page_btn'>
               Inicio
             </Button>
@@ -134,31 +127,31 @@ class BooksGrid extends React.Component {
           /> : null}
 
         <div className='book_grid_container'>
-          {currentPageBooks.map(book => ( 
-            <Card className='book_grid_item' key={book.id} onClick={
+          {currentPageBooks.map((book, index) => ( 
+            <Card className='book_grid_item' key={index} onClick={
               () => {
                 this.loadData(book.id)
               } 
             }
             border='secondary'>
               <Card.Img variant="top" src={path.join(imgPath, 'books', book.image_src || 'default.png')} 
-              className='card_images'/>                 
+              className='card_images' alt='portada'/>          
               <Card.Body className='card_body'>
                 {
-                (book.autor && book.ano_edicion) && 
+                ((book.autor && book.ano_edicion) && 
                 <Card.Header className='card_header'>
                   {book.autor.slice(0,Math.ceil(maxTitleLength/2))}, {book.ano_edicion}
-                </Card.Header> ||
+                </Card.Header>) ||
 
-                (!book.autor && book.ano_edicion) && 
+                ((!book.autor && book.ano_edicion) && 
                 <Card.Header className='card_header'>
                   {book.ano_edicion}
-                </Card.Header> ||
+                </Card.Header>) ||
 
-                (book.autor && !book.ano_edicion) && 
+                ((book.autor && !book.ano_edicion) && 
                 <Card.Header className='card_header'>
                   {book.autor.slice(0,Math.ceil(maxTitleLength/2))}
-                </Card.Header>                   
+                </Card.Header>)                   
                 }
                 <Card.Title className='card_title'>
                   { book.titulo ? book.titulo.slice(0,maxTitleLength) : 'Sin Título'}

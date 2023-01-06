@@ -34,6 +34,9 @@ contextBridge.exposeInMainWorld('electron', {
     },
     saveBookImg: async (newImgPath, copyPath) => {
       ipcRenderer.send('saveBookImg',newImgPath, copyPath)
+    },
+    deleteBook: async (id) => {
+      ipcRenderer.send('deleteBook',id)
     }
   }
 })

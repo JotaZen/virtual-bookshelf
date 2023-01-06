@@ -1,6 +1,19 @@
-.add_book:hover{
-    transition: transform .1s;
-    cursor: pointer;
-    transform: scale(1.05);
-    z-index: 20;
+.add_book:hover {
+  transition: transform .1s;
+  cursor: pointer;
+  transform: scale(1.05);
+  z-index: 20;
+}
+.image-preview {
+  
+  padding: 5px;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+}
+.image-preview * {
+  margin: 0;
+  padding: 0;
+  border-radius: 10px;
 }

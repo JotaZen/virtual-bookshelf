@@ -11,17 +11,13 @@ class Main extends React.Component {
     super(props)
     this.state = {
     }
-  }
-  reload = () => {}
-    
+  }    
   render() {
     return (
       <>  
         <Header/>
         <div className='margin_body'></div>
         <BooksGrid/>
-        <button style={{color:"blue", display: "flex"}}> ACA
-        </button>
       </>
     )
   }

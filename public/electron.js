@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, ipcMain, Notification } = require('electron')
+const { app, BrowserWindow, Menu, ipcMain, Notification, globalShortcut } = require('electron')
 
 const url = require('url')
 const path = require('path')
@@ -8,7 +8,7 @@ const { retrieveBooks } = require('./electron/CRUDJson/retrieveBooks')
 const { changeBook } = require('./electron/CRUDJson/test_changeBook')
 const { saveBook } = require('./electron/CRUDJson/saveBook.js')
 const { saveImage } = require('./electron/CRUDJson/saveImage.js')
-
+const { deleteBook } = require('./electron/CRUDJson/deleteBook.js')
 //
 // Creación de pestaña principal
 //
@@ -42,6 +42,10 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
   createWindow()
+  globalShortcut.register('CommandOrControl+Shift+j', () => {
+    mainWindow.toggleDevTools()
+  })
+
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
@@ -112,15 +116,27 @@ ipcMain.handle('retrieveBooks', (event) => {
 })
 
 ipcMain.on('saveBook', (event, newBook) => {
-  saveBook(path.join(mainPath, 'assets', 'data', 'libros.json'), newBook)
+  try {
+    saveBook(path.join(mainPath, 'assets', 'data', 'libros.json'), newBook)
+    new Notification({ title: 'Biblioteca', body: 'Se agregó el libro correctamente.' }).show()
+  } catch {
+    new Notification({ title: 'Error', body: 'No se pudo añadir el libro.' }).show()
+  }
 })
 ipcMain.on('saveBookImg', (event, newImgPath, copyPath) => {
   saveImage(newImgPath, copyPath)
 })
+ipcMain.on('deleteBook', (event, id) => {
+  try {
+    deleteBook(path.join(mainPath, 'assets', 'data', 'libros.json'), id)
+    new Notification({ title: 'Biblioteca', body: 'Se borró el libro correctamente.' }).show()
+  } catch {
+    new Notification({ title: 'Error', body: 'No se pudo borrar el libro.' }).show()
+  }
+})
 ipcMain.handle('getMainPath', (event) => {
   return mainPath
 })
-
 ipcMain.handle('getImgPath', (event, folder) => {
   return path.join(mainPath, "assets", "img", folder)
 })

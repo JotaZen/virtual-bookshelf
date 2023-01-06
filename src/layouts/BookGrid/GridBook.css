@@ -1,3 +1,6 @@
+:root {
+  --grid-width: 12.6rem;
+}
 .book_grid_menu {
   display: flex;
   flex-flow: column;
@@ -8,7 +11,7 @@
   margin-top: 10px;
   margin-bottom: 10px;
   display: grid;
-  grid-template-columns: repeat(5, 11rem);
+  grid-template-columns: repeat(5, var(--grid-width));
   grid-gap: 10px;
 }
 .book_grid_container * {
@@ -23,18 +26,25 @@ div.book_grid_item:hover{
 }
 .card_body {
   padding-top: 5px;
-  background-color: rgb(255, 255, 255);
+  background-color: var(--third-color);
+  color: var(--main-font-color);
+  border: 1px var(--fourth-color) solid;
+  border-radius: 0px 0px 5px 5px;
 }
 .card_header {
+  border-bottom: 1px solid var(--fourth-color);
+  font-style: italic;
+  color: var(--main-font-color);
   padding: 0px;
 }
 .card_title {
-padding-top: 5px;
+  padding-top: 5px;
 }
 .card_images{
   object-fit: contain;
-  width: 10.9rem;
+  width: calc(var(--grid-width)*0.990909091);
   height: 150px;
+  background-color: var(--fourth-color);
 }
 .top_container{
   width: 100%;
@@ -42,58 +52,67 @@ padding-top: 5px;
   flex-flow: row wrap;
   justify-content: space-evenly;
 }
-
 .navigation_buttons, .navigation_buttons_fix{
   display: flex;
   gap: 5px;  
 }
 .navigation_buttons Button{
   margin-top: 5px;
-  background-color: #8a2be2;
+  background-color: var(--main-color);
   border: 0;
   width: 40px;
   height: 40px;
+  display: flex;
+  justify-content: center;
 }
-
 .navigation_buttons_fix Button{
   margin-top: 5px;
-  background-color: #8a2be2;
+  background-color: var(--main-color);
   border: 0;
   width: auto;
   height: 40px;
+  display: flex;
+  justify-content: center;
 }
-
 #current_page_btn {
-  background-color: blue;
+  background-color: var(--selected-items);
 } 
-
 .search_input{
   margin-top: 5px;
   display: flex;
   flex-flow: row nowrap;
 }
 #search_box{
+  color: var(--main-font-color);
+  background-color: var(--main-color);
   max-width: 300px;
 }
+#search_box::placeholder{
+  color: var(--main-font-color);
+}
+
 .image_small{
   margin-right: 15px;
   max-width: 40px;
   max-height: 40px;
   transform: rotateY(180deg);
+  filter: invert(42%) sepia(49%) 
+  saturate(451%) hue-rotate(165deg) 
+  brightness(100%) contrast(88%);
 }
 
 @media (max-width: 1060px) {
   .book_grid_container {
-    grid-template-columns: repeat(4, 11rem);
+    grid-template-columns: repeat(4, var(--grid-width));
   }
 }
 @media (max-width: 860px) {
   .book_grid_container {
-    grid-template-columns: repeat(3, 11rem);
+    grid-template-columns: repeat(3, var(--grid-width));
   }
 }
 @media (max-width: 660px) {
   .book_grid_container {
-    grid-template-columns: repeat(2, 11rem);
+    grid-template-columns: repeat(2, var(--grid-width));
   }
 }
