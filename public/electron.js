@@ -17,7 +17,7 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    backgroundColor: '#8a2be2',
+    backgroundColor: '#fff',
     webPreferences: {
       nodeIntegration: false,
       worldSafeExecuteJavaScript: true,
@@ -32,12 +32,26 @@ const createWindow = () => {
     pathname: path.join(__dirname, '../build/index.html'),
     protocol: 'file:',
     slashes: true,
-  });
+  })
   mainWindow.setTitle('Raúl Espinoza')
   mainWindow.loadURL(startUrl)
   Menu.setApplicationMenu(Menu.buildFromTemplate(templateMenu))
 
   mainWindow.on('close', () => {app.quit()})
+  mainWindow.webContents.setZoomFactor(1.0);
+  mainWindow.webContents
+    .setVisualZoomLevelLimits(1, 5)
+    .catch((err) => console.log(err))
+ 
+    mainWindow.webContents.on("zoom-changed", (event, zoomDirection) => {
+      let currentZoom = mainWindow.webContents.getZoomFactor()
+      if (zoomDirection === "in" && currentZoom < 1.5) {
+        mainWindow.webContents.zoomFactor = currentZoom + 0.2 }
+      if (zoomDirection === "out" && currentZoom > 0.8) {
+        mainWindow.webContents.zoomFactor = currentZoom - 0.2 }
+      
+  })
+
 }
 
 app.whenReady().then(() => {
@@ -64,7 +78,7 @@ if (!app.isPackaged) {
         label: 'Show/Hide Dev Tools',
         accelerator: 'Ctrl+D',
         click(item, focusedWindow) {
-          focusedWindow.toggleDevTools();
+          focusedWindow.toggleDevTools()
         }
       },
       {

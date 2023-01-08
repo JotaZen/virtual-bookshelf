@@ -1,0 +1,68 @@
+.showbook_header {
+  padding-left: 25px;
+}
+.show_book_body {
+  padding: 12px 25px 20px 25px;
+}
+.show_autor {
+  font-size: 2rem;
+  font-style: italic;
+  padding-left: 10px;
+}
+.show_image {
+  margin-bottom: 15px;
+  border: solid var(--secondary-color) 1px;
+  border-radius: 5px 0px;
+  object-fit:scale-down;
+  background-position:top;
+  max-height: 50vh;
+  background-color: var(--fourth-color-background);
+  object-fit:contain;
+  background-position:top;
+}
+.show_image:hover {
+  transition: transform .1s;
+  cursor: zoom-in;
+  transform: scale(1.0);
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+}
+.show_image_z {
+  background-color: hsla(0, 0%, 0%, 0.61);
+  padding-top: 50px;
+  display: flex;
+  flex-direction: column;
+}
+.show_image_zoom {
+  border: 1px var(--secondary-color) solid;
+  border-radius: 5px 0px;
+  width: 100%;
+  transform: scale(1);
+  transition: transform 0.3s;
+}
+.show_image_zoom:hover {
+  cursor: zoom-out;
+}
+.show_col_1 {
+  min-width: 150px;
+  display: flex;
+  flex-flow: column nowrap;
+}
+.show_col_2 {
+  display: flex;
+  flex-flow: column wrap;
+}
+.show_edicion {
+  font-style: italic;
+}
+.show_descripcion {
+  padding: 5px;
+  text-align: justify;
+}
+.show_close_button {
+  background-color: var(--main-color);
+}
+.show_close_button:hover {
+  background-color: var(--secondary-color);
+}

@@ -18,11 +18,19 @@
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background-color: transparent;
 }
+div.book_grid_item{
+  transform: scale(1);
+  transition: transform 0.5s
+}
+
 div.book_grid_item:hover{
-  transition: transform .1s;
+  transition: transform 0.5s;
   cursor: pointer;
   transform: scale(1.05);
-  z-index: 20;
+  z-index: 49;
+}
+div.book_grid_item:hover .card_images {
+  background-color: var(--fourth-color);
 }
 .card_body {
   padding-top: 5px;
@@ -31,22 +39,26 @@ div.book_grid_item:hover{
   border: 1px var(--fourth-color) solid;
   border-radius: 0px 0px 5px 5px;
 }
-.card_header {
+.card_header, .card_footer{
   border-bottom: 1px solid var(--fourth-color);
   font-style: italic;
   color: var(--main-font-color);
   padding: 0px;
 }
+.card_footer {
+  border: 0px;
+}
 .card_title {
   padding-top: 5px;
 }
 .card_images{
-  object-fit: contain;
-  width: calc(var(--grid-width)*0.990909091);
-  height: 150px;
-  background-color: var(--fourth-color);
+  object-fit:cover;
+  background-position:top;
+  width: calc(var(--grid-width)-1px);
+  height: 220px;
+  background-color: var(--fourth-color-background);
 }
-.top_container{
+.top_container {
   width: 100%;
   display: flex;
   flex-flow: row wrap;
@@ -54,9 +66,9 @@ div.book_grid_item:hover{
 }
 .navigation_buttons, .navigation_buttons_fix{
   display: flex;
-  gap: 5px;  
+  gap: 1px;  
 }
-.navigation_buttons Button{
+.navigation_buttons Button {
   margin-top: 5px;
   background-color: var(--main-color);
   border: 0;
@@ -64,8 +76,10 @@ div.book_grid_item:hover{
   height: 40px;
   display: flex;
   justify-content: center;
+  border-radius: 1px;
 }
-.navigation_buttons_fix Button{
+.navigation_buttons_fix Button {
+  border-radius: 1px;
   margin-top: 5px;
   background-color: var(--main-color);
   border: 0;
@@ -86,6 +100,7 @@ div.book_grid_item:hover{
   color: var(--main-font-color);
   background-color: var(--main-color);
   max-width: 300px;
+  border-radius: 1px;
 }
 #search_box::placeholder{
   color: var(--main-font-color);

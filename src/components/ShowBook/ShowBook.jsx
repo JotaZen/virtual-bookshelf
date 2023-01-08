@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import Modal from 'react-bootstrap/Modal'
+import { Modal, Alert, Card, Row, Col, Button } from 'react-bootstrap'
 import './ShowBook.css'
+import path from 'path-browserify'
+import { format } from 'path-browserify'
 
 class ShowBook extends React.Component {
   constructor(props) {
@@ -10,11 +12,20 @@ class ShowBook extends React.Component {
       bookId: this.props.id,
       close: this.props.onClose,
       imgPath: null,
-      bookData: null
+      bookData: null,
+      zoomImage: false
     }
   }
   handleClose = () => {
     this.state.close()
+  }
+ 
+  handleImgShow = () => {
+    this.setState({ zoomImage: true})
+  } 
+
+  handleImgClose = () => {
+    this.setState({ zoomImage: false})
   }
   componentDidMount = () => {
     window.electron.CRUD.retrieveBooks().then(booksData => {
@@ -26,75 +37,89 @@ class ShowBook extends React.Component {
   render() {
     if (!this.state.show || this.state.bookData == null) {
       return null;
-    }
+    } 
     let { bookData } = this.state
+
     return (
-      <> 
-        <Modal show={this.state.show} onHide={this.handleClose} dialogClassName="modal-90w">
-          <Modal.Header closeButton>
-          </Modal.Header>
-          <Modal.Body>
-            <h1>"{bookData.titulo}"</h1>
-            <p>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </p>
+      <Modal show={this.state.show} 
+        onHide={this.handleClose} 
+        dialogClassName="modal-lg"
+      >
+        <Modal.Header className='showbook_header' closeButton>
+          N°: {bookData.id}
+        </Modal.Header>
+        <Modal.Body className='show_book_body'>
+          <h1>"{bookData.titulo}"</h1>
+          <p className='show_autor'>
+            {
+              bookData.autor && 
+              `${bookData.autor}`
+            }
+          </p>
+          <hr />
+            <Row>      
+              { bookData.image_src &&
+              <Col className='show_col_1'>
+                <Card.Img 
+                  variant="top" 
+                  src={path.join(this.state.imgPath, 'books', bookData.image_src)} 
+                  className='show_image' 
+                  alt='portada'
+                  onClick={this.handleImgShow} 
+                /> 
+              </Col> }
+              { 
+                (bookData.estado || bookData.editorial || bookData.ano_edicion || bookData.descripcion) &&
+                <Col className='show_col_2' xs={12} md={8}>
 
-            <h4>Tooltips in a modal</h4>
-            <p>
+                  <h4 className='show_edicion'>
+                    {(
+                    (bookData.editorial && bookData.ano_edicion) && 
+                    `Edición: ${bookData.editorial}, ${bookData.ano_edicion}`
+                    ) ||
+                    ((!bookData.editorial && bookData.ano_edicion) && 
+                    `${bookData.ano_edicion}`
+                    ) ||
+                    ((bookData.editorial && !bookData.ano_edicion) && 
+                    `Edición: ${bookData.editorial}`
+                    )}
+                  </h4>
+                  { bookData.estado &&
+                    <h5>{bookData.estado}</h5>
+                  }
+                  { bookData.descripcion &&         
+                    <p className='show_descripcion'>
+                      {bookData.descripcion}
+                    </p>
+                  }
+                </Col>
+              }
+            </Row>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="secondary" 
+            onClick={this.handleClose}
+            className="show_close_button"
+          >
+              Cerrar
+          </Button>
 
-            </p>
-
-            <hr />
-
-            <h4>Overflowing text to show scroll behavior</h4>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur
-              et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor
-              auctor.
-            </p>
-            <p>
-              Aenean lacinia bibendum nulla sed consectetur. Praesent commodo
-              cursus magna, vel scelerisque nisl consectetur et. Donec sed odio
-              dui. Donec ullamcorper nulla non metus auctor fringilla.
-            </p>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur
-              et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor
-              auctor.
-            </p>
-            <p>
-              Aenean lacinia bibendum nulla sed consectetur. Praesent commodo
-              cursus magna, vel scelerisque nisl consectetur et. Donec sed odio
-              dui. Donec ullamcorper nulla non metus auctor fringilla.
-            </p>
-            <p>
-              Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-              dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-              ac consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur
-              et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor
-              auctor.
-            </p>
-            <p>
-              Aenean lacinia bibendum nulla sed consectetur. Praesent commodo
-              cursus magna, vel scelerisque nisl consectetur et. Donec sed odio
-              dui. Donec ullamcorper nulla non metus auctor fringilla.
-            </p>
-          </Modal.Body>
-        </Modal>
-      </>
+        </Modal.Footer>
+        {       
+          bookData.image_src && 
+          <Modal 
+            show={this.state.zoomImage} 
+            onHide={this.handleImgClose} 
+            onClick={this.handleImgClose} 
+            dialogClassName="modal-xl"
+            className='show_image_z'
+          >
+            <img src={path.join(this.state.imgPath, 'books', bookData.image_src)} 
+            className='show_image_zoom' alt='portada_zoom'/>
+          </Modal>
+        }
+      </Modal>
     )
   } 
 }

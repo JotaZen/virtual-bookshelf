@@ -28,13 +28,12 @@ class AddBook extends React.Component {
     this.setState({ show:true })
   }
   handleClose = () => {
-    this.setState({ show:false })
+    this.setState({ show:false, imagePath: "" })
   }
 
   handleChange = (event) => {
     const formKey = event.target.name
     const formValue = event.target.value
-    
     this.setState({ formData: { 
       ...this.state.formData, 
       [formKey]: formValue
@@ -72,13 +71,19 @@ class AddBook extends React.Component {
       'books',
       `${formData.id}.png`
     )
-    formData.image_src = newImagePath.split('/').slice(-1)[0]
-
+    if (this.state.imagePath !== '') {
+      formData.image_src = newImagePath.split('/').slice(-1)[0]
+    }
+    const select_estado = document.getElementById('select_estado')
+    formData.estado = select_estado.value
+    
     console.log(formData)
     if (formData.titulo === 'NO GUARDAR') { return }
     window.electron.CRUD.saveBook(formData)
-    window.electron.CRUD.saveBookImg(this.state.imagePath, newImagePath)
-
+    if (this.state.imagePath !== '') {
+      window.electron.CRUD.saveBookImg(this.state.imagePath, newImagePath)
+    }
+    
     window.electron.main.reload()  
   }
 
@@ -96,7 +101,7 @@ class AddBook extends React.Component {
           <Modal.Header closeButton onHide={this.handleClose}>
             <Modal.Title>Ingresar Libro</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body className='add_book_body'>
             <Form>
               <Form.Group className="mb-3">
                 <Form.Label>Título</Form.Label>
@@ -149,7 +154,11 @@ class AddBook extends React.Component {
                 <Col>
                   <Form.Group className="mb-3">
                     <Form.Label>Estado</Form.Label>
-                    <Form.Select aria-label="Selección estado">        
+                    <Form.Select 
+                      aria-label="Selección estado" 
+                      name="estado"
+                      id='select_estado'
+                    >        
                       <option value="Disponible">Disponible</option>
                       <option value="Prestado">Prestado</option>
                       <option value="Perdido">Perdido</option>
@@ -160,10 +169,10 @@ class AddBook extends React.Component {
               <Row>
                 <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>Portada</Form.Label>
+                    <Form.Label>Portada ( .png / .jpg / .gif )</Form.Label>
                     <Form.Control
                       type="file"
-                      placeholder=""
+                      placeholder="asdasd"
                       onChange={this.handleImgChange}
                       accept='.jpg,.jpeg,.png,.jfif,.gif,.webp,.bmp'
                     />
@@ -178,13 +187,12 @@ class AddBook extends React.Component {
                     className='card_images flex-centered' alt='portada'/>
                   </Alert>
                 </Col>
-                }
-                
+                } 
               </Row>
               <Form.Group className="mb-3">
                 <Form.Label>Descripción</Form.Label>
                 <Form.Control as="textarea" rows={3} 
-                  name='descipcion'
+                  name='descripcion'
                   placeholder='...'
                   value={formData.descripcion} 
                   onChange={this.handleChange}
@@ -198,8 +206,8 @@ class AddBook extends React.Component {
               Cerrar
             </Button>       
             <Button variant="primary" onClick={()=> {
-              this.addBook() 
-              this.handleClose()}} 
+              this.addBook()
+              }} 
               disabled={!formIsValid}>
               Guardar
             </Button>

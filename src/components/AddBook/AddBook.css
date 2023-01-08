@@ -1,3 +1,6 @@
+.add_book_body {
+  padding: 10px 25px 0px 25px;
+}
 .add_book:hover {
   transition: transform .1s;
   cursor: pointer;
@@ -5,7 +8,7 @@
   z-index: 20;
 }
 .image-preview {
-  
+  background-color: var(--my-white);
   padding: 5px;
   display: flex;
   flex-flow: column wrap;
