@@ -13,7 +13,7 @@ contextBridge.exposeInMainWorld('electron', {
       return img
     },
     reload: () => {
-      ipcRenderer.send('reload')
+      ipcRenderer.send('reloadMain')
     }
   },
   notificationApi: {
@@ -31,6 +31,12 @@ contextBridge.exposeInMainWorld('electron', {
     },
     saveBook: async (newBook) => {
       ipcRenderer.send('saveBook',newBook)
+    },
+    updateBook: async (newBook) => {
+      ipcRenderer.send('updateBook',newBook)
+    },
+    deleteBookImg: async (imgPath) => {
+      ipcRenderer.send('deleteBookImg', imgPath)
     },
     saveBookImg: async (newImgPath, copyPath) => {
       ipcRenderer.send('saveBookImg',newImgPath, copyPath)

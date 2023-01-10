@@ -47,11 +47,11 @@
 .show_col_1 {
   min-width: 150px;
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: column;
 }
 .show_col_2 {
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column;
 }
 .show_edicion {
   font-style: italic;
@@ -59,10 +59,17 @@
 .show_descripcion {
   padding: 5px;
   text-align: justify;
+
 }
 .show_close_button {
-  background-color: var(--main-color);
+  background-color: var(--third-color);
 }
 .show_close_button:hover {
+  background-color: var(--secondary-color);
+}
+.show_edit_button {
+  background-color: var(--main-color);
+}
+.show_edit_button:hover {
   background-color: var(--secondary-color);
 }

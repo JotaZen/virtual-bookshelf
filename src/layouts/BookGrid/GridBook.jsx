@@ -2,9 +2,7 @@ import React from 'react'
 import './GridBook.css'
 import path from 'path-browserify'
 
-import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
-import Form from 'react-bootstrap/Form'
+import { Button, Card, Form, Alert } from 'react-bootstrap'
 
 import ShowBook from '../../components/ShowBook/ShowBook'
 
@@ -15,8 +13,8 @@ class BooksGrid extends React.Component {
       currentPage: 1,
       booksData: null,
       imgPath: null,
-      maxItemsPage: 20,
-      maxTitleLength: 40,
+      maxItemsPage: 25,
+      maxTitleLength: 50,
       searchTerm: '',
       showBook: false,
       selectedBookId: null
@@ -60,7 +58,7 @@ class BooksGrid extends React.Component {
     let { booksData } = this.state
   
     if (booksData === null) {
-      return <p>Cargando libros...</p>
+      return <Alert>Cargando libros...</Alert>
     } else if (searchTerm !== '') {
       booksData = booksData.filter(function(book){
         return (
@@ -135,12 +133,13 @@ class BooksGrid extends React.Component {
                 this.loadData(book.id)
               }}
               border='secondary'
-            > 
-              <Card.Img variant="top" src={path.join(imgPath, 'books', book.image_src || 'default.png')} 
-              className='card_images' alt='portada'
-              onError= {(e)=>{
-                e.onerror=null
-                e.target.src=path.join(imgPath, 'books', 'default.png')}}
+            >
+            
+              <Card.Img variant="top" src={ book.image_src ? path.join(imgPath, 'books', book.image_src) : ''}
+              className={ book.image_src ? 'card_images' : ''} 
+              // onError= {(e)=>{
+              //   e.onerror=null
+              //   e.target.src=path.join(imgPath, 'books', 'default.png')}}
               />
               <Card.Body className='card_body'>
                 {
@@ -150,9 +149,19 @@ class BooksGrid extends React.Component {
                   </Card.Header>)                   
                 }
                 <Card.Title className='card_title'>
-                  { book.titulo ? book.titulo.slice(0,maxTitleLength) : 'Sin Título'}
-                  { book.titulo && book.titulo.length > maxTitleLength ? '...' : '' }
+
+                  { book.titulo ? book.titulo.slice(0,!book.image_src ? maxTitleLength : 30) : 'Sin Título'}
+                  { book.titulo && book.titulo.length > (!book.image_src ? maxTitleLength : 30) ? '...' : '' }
+                 
+                  { (!book.image_src && book.descripcion) &&
+                  <Card.Text className='card_text'>
+                    <br/>
+                    {book.descripcion.slice(0, maxTitleLength)} 
+                    {(book.descripcion && book.descripcion.length > maxTitleLength) ? '...' : '' } 
+                  </Card.Text>
+                  }
                 </Card.Title>
+
                 {
                   ((book.editorial && book.ano_edicion) && 
                   <Card.Footer className='card_footer'>

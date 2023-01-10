@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
-import { Modal, Alert, Card, Row, Col, Button } from 'react-bootstrap'
+import React from 'react'
+import { Modal, Card, Row, Col, Button } from 'react-bootstrap'
 import './ShowBook.css'
 import path from 'path-browserify'
-import { format } from 'path-browserify'
+
+import UpdateBook from '../UpdateBook/UpdateBook'
 
 class ShowBook extends React.Component {
   constructor(props) {
@@ -13,38 +14,52 @@ class ShowBook extends React.Component {
       close: this.props.onClose,
       imgPath: null,
       bookData: null,
-      zoomImage: false
+      zoomImage: false,
+      editMode: false
     }
   }
   handleClose = () => {
     this.state.close()
   }
- 
   handleImgShow = () => {
     this.setState({ zoomImage: true})
   } 
-
   handleImgClose = () => {
     this.setState({ zoomImage: false})
+  }
+  handleEditModeShow = () => {
+    this.setState({ editMode: true })
+  } 
+  handleEditModeClose = () => {
+    this.setState({ editMode: false})
   }
   componentDidMount = () => {
     window.electron.CRUD.retrieveBooks().then(booksData => {
       window.electron.main.getImgPath().then(imgPath => {
-        this.setState({ imgPath, bookData: booksData.find(book => book.id == this.state.bookId) })
+        this.setState({ 
+          bookData: booksData.find(book => book.id === this.state.bookId),
+          imgPath: imgPath })
       })
     })
   }
   render() {
-    if (!this.state.show || this.state.bookData == null) {
+    if ( this.state.bookData == null) {
       return null;
     } 
-    let { bookData } = this.state
-
+    let { bookData, editMode } = this.state
+    let imgPath
+    try {
+      imgPath = path.join(this.state.imgPath, 'books', this.state.bookData.image_src)
+    } catch {
+      imgPath = ''
+    }
+   
     return (
       <Modal show={this.state.show} 
         onHide={this.handleClose} 
         dialogClassName="modal-lg"
       >
+        { !editMode && <>     
         <Modal.Header className='showbook_header' closeButton>
           N°: {bookData.id}
         </Modal.Header>
@@ -62,7 +77,7 @@ class ShowBook extends React.Component {
               <Col className='show_col_1'>
                 <Card.Img 
                   variant="top" 
-                  src={path.join(this.state.imgPath, 'books', bookData.image_src)} 
+                  src={imgPath} 
                   className='show_image' 
                   alt='portada'
                   onClick={this.handleImgShow} 
@@ -75,13 +90,13 @@ class ShowBook extends React.Component {
                   <h4 className='show_edicion'>
                     {(
                     (bookData.editorial && bookData.ano_edicion) && 
-                    `Edición: ${bookData.editorial}, ${bookData.ano_edicion}`
+                    `Edición: ${bookData.editorial}, ${bookData.ano_edicion}.`
                     ) ||
                     ((!bookData.editorial && bookData.ano_edicion) && 
-                    `${bookData.ano_edicion}`
+                    `${bookData.ano_edicion}.`
                     ) ||
                     ((bookData.editorial && !bookData.ano_edicion) && 
-                    `Edición: ${bookData.editorial}`
+                    `Edición: ${bookData.editorial}.`
                     )}
                   </h4>
                   { bookData.estado &&
@@ -97,16 +112,23 @@ class ShowBook extends React.Component {
             </Row>
         </Modal.Body>
         <Modal.Footer>
+
+          <Button 
+            variant="secondary" 
+            onClick={this.handleEditModeShow}
+            className="show_edit_button"
+          >
+            Editar
+          </Button>
           <Button 
             variant="secondary" 
             onClick={this.handleClose}
             className="show_close_button"
           >
-              Cerrar
+            Cerrar
           </Button>
-
-        </Modal.Footer>
-        {       
+          {      
+          // Image Zoom 
           bookData.image_src && 
           <Modal 
             show={this.state.zoomImage} 
@@ -115,11 +137,19 @@ class ShowBook extends React.Component {
             dialogClassName="modal-xl"
             className='show_image_z'
           >
-            <img src={path.join(this.state.imgPath, 'books', bookData.image_src)} 
+            <img src={imgPath} 
             className='show_image_zoom' alt='portada_zoom'/>
           </Modal>
+          }
+        </Modal.Footer>  
+        </> 
+        }
+        {
+        editMode && 
+        <UpdateBook formData={bookData} onClose={this.handleEditModeClose} image={imgPath}/>
         }
       </Modal>
+
     )
   } 
 }

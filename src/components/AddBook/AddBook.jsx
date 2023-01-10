@@ -7,7 +7,8 @@ import {
   Row,
   Col,
   Alert,
-  Card } from 'react-bootstrap'
+  Card
+} from 'react-bootstrap'
 
 import path from 'path-browserify'
 import './AddBook.css'
@@ -25,22 +26,23 @@ class AddBook extends React.Component {
     }
   }
   handleShow = () => {
-    this.setState({ show:true })
+    this.setState({ show: true })
   }
   handleClose = () => {
-    this.setState({ show:false, imagePath: "" })
+    this.setState({ show: false, imagePath: "" })
   }
 
   handleChange = (event) => {
     const formKey = event.target.name
     const formValue = event.target.value
-    this.setState({ formData: { 
-      ...this.state.formData, 
-      [formKey]: formValue
+    this.setState({
+      formData: {
+        ...this.state.formData,
+        [formKey]: formValue
       },
       formIsValid:
-        !((formKey === 'titulo' && formValue === '') || 
-        (formKey !== 'titulo' && this.state.formData.titulo === ''))
+        !((formKey === 'titulo' && formValue === '') ||
+          (formKey !== 'titulo' && this.state.formData.titulo === ''))
     })
   }
 
@@ -49,13 +51,13 @@ class AddBook extends React.Component {
   }
 
   addBook = async () => {
-    if (!this.state.formIsValid) {return}
+    if (!this.state.formIsValid) { return }
     const { formData } = this.state
     const dateNow = new Date(Date.now())
     const date = dateNow.toLocaleDateString()
-    const time = dateNow.toLocaleTimeString('en-US', { 
-      hour12: false, 
-      hour: "numeric", 
+    const time = dateNow.toLocaleTimeString('en-US', {
+      hour12: false,
+      hour: "numeric",
       minute: "numeric",
       second: 'numeric'
     })
@@ -63,11 +65,15 @@ class AddBook extends React.Component {
     formData.hora_ingreso = time
 
     window.electron.CRUD.retrieveBooks().then(booksData => {
-      const ids = booksData.map( book => book.id ) 
-      formData.id = ids.reduce((max, val) => max > val ? max : val) + 1
-    })  
+      const ids = booksData.map(book => book.id)
+      if (ids.length > 2) {
+        formData.id = ids.reduce((max, val) => max > val ? max : val) + 1 
+      } else {
+        formData.id = ids.length + 1
+      }
+    })
     const newImagePath = path.join(
-      await window.electron.main.getImgPath(), 
+      await window.electron.main.getImgPath(),
       'books',
       `${formData.id}.png`
     )
@@ -76,25 +82,25 @@ class AddBook extends React.Component {
     }
     const select_estado = document.getElementById('select_estado')
     formData.estado = select_estado.value
-    
+
     console.log(formData)
     if (formData.titulo === 'NO GUARDAR') { return }
     window.electron.CRUD.saveBook(formData)
     if (this.state.imagePath !== '') {
       window.electron.CRUD.saveBookImg(this.state.imagePath, newImagePath)
     }
-    
-    window.electron.main.reload()  
+
+    window.electron.main.reload()
   }
 
   render() {
-    const { formData,formIsValid } = this.state
+    const { formData, formIsValid } = this.state
     return (
       <>
         <Nav.Link onClick={this.handleShow} className='add_book'>Ingresar Libro</Nav.Link>
-  
-        <Modal  
-          show={this.state.show} 
+
+        <Modal
+          show={this.state.show}
           dialogClassName="modal-lg"
           className='add_book_menu'
         >
@@ -154,11 +160,11 @@ class AddBook extends React.Component {
                 <Col>
                   <Form.Group className="mb-3">
                     <Form.Label>Estado</Form.Label>
-                    <Form.Select 
-                      aria-label="Selección estado" 
+                    <Form.Select
+                      aria-label="Selección estado"
                       name="estado"
                       id='select_estado'
-                    >        
+                    >
                       <option value="Disponible">Disponible</option>
                       <option value="Prestado">Prestado</option>
                       <option value="Perdido">Perdido</option>
@@ -169,7 +175,7 @@ class AddBook extends React.Component {
               <Row>
                 <Col>
                   <Form.Group className="mb-3">
-                    <Form.Label>Portada ( .png / .jpg / .gif )</Form.Label>
+                    <Form.Label>Portada (png/jpg/gif)</Form.Label>
                     <Form.Control
                       type="file"
                       placeholder="asdasd"
@@ -178,23 +184,23 @@ class AddBook extends React.Component {
                     />
                   </Form.Group>
                 </Col>
-                
-                { this.state.imagePath &&
-                <Col>
-                  <Alert variant='secondary' className='image-preview'>
-                    <p>Vista Previa</p>
-                    <Card.Img variant="top" src={this.state.imagePath} 
-                    className='card_images flex-centered' alt='portada'/>
-                  </Alert>
-                </Col>
-                } 
+
+                {this.state.imagePath &&
+                  <Col>
+                    <Alert variant='secondary' className='image-preview'>
+                      <p>Vista Previa</p>
+                      <Card.Img variant="top" src={this.state.imagePath}
+                        className='card_images flex-centered' alt='portada' />
+                    </Alert>
+                  </Col>
+                }
               </Row>
               <Form.Group className="mb-3">
                 <Form.Label>Descripción</Form.Label>
-                <Form.Control as="textarea" rows={3} 
+                <Form.Control as="textarea" rows={3}
                   name='descripcion'
                   placeholder='...'
-                  value={formData.descripcion} 
+                  value={formData.descripcion}
                   onChange={this.handleChange}
                 />
               </Form.Group>
@@ -202,20 +208,20 @@ class AddBook extends React.Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleClose}>
-              Cerrar
-            </Button>       
-            <Button variant="primary" onClick={()=> {
+            <Button variant="primary" onClick={() => {
               this.addBook()
-              }} 
+            }}
               disabled={!formIsValid}>
               Guardar
+            </Button>
+            <Button variant="secondary" onClick={this.handleClose}>
+              Cerrar
             </Button>
           </Modal.Footer>
         </Modal>
       </>
     )
-  } 
+  }
 }
 
 export default AddBook

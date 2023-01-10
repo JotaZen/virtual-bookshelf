@@ -5,10 +5,11 @@ const path = require('path')
 
 // Funciones del CRUD
 const { retrieveBooks } = require('./electron/CRUDJson/retrieveBooks')
-const { changeBook } = require('./electron/CRUDJson/test_changeBook')
 const { saveBook } = require('./electron/CRUDJson/saveBook.js')
 const { saveImage } = require('./electron/CRUDJson/saveImage.js')
+const { deleteImage } = require('./electron/CRUDJson/deleteImage.js')
 const { deleteBook } = require('./electron/CRUDJson/deleteBook.js')
+const { updateBook } = require('./electron/CRUDJson/updateBook.js')
 //
 // Creación de pestaña principal
 //
@@ -19,7 +20,8 @@ const createWindow = () => {
     height: 600,
     backgroundColor: '#fff',
     webPreferences: {
-      nodeIntegration: false,
+      spellcheck: false,
+      nodeIntegration: true,
       worldSafeExecuteJavaScript: true,
       contextIsolation: true,
       sandbox: false,
@@ -27,7 +29,6 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js')
     }
   })
-
   const startUrl = process.env.ELECTRON_START_URL || url.format({
     pathname: path.join(__dirname, '../build/index.html'),
     protocol: 'file:',
@@ -37,29 +38,33 @@ const createWindow = () => {
   mainWindow.loadURL(startUrl)
   Menu.setApplicationMenu(Menu.buildFromTemplate(templateMenu))
 
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.maximize()
+  })
   mainWindow.on('close', () => {app.quit()})
   mainWindow.webContents.setZoomFactor(1.0);
   mainWindow.webContents
-    .setVisualZoomLevelLimits(1, 5)
+    .setVisualZoomLevelLimits(1, 1.5)
     .catch((err) => console.log(err))
- 
-    mainWindow.webContents.on("zoom-changed", (event, zoomDirection) => {
-      let currentZoom = mainWindow.webContents.getZoomFactor()
-      if (zoomDirection === "in" && currentZoom < 1.5) {
-        mainWindow.webContents.zoomFactor = currentZoom + 0.2 }
-      if (zoomDirection === "out" && currentZoom > 0.8) {
-        mainWindow.webContents.zoomFactor = currentZoom - 0.2 }
-      
+  mainWindow.webContents.zoomFactor = 1
+  mainWindow.webContents.on("zoom-changed", (event, zoomDirection) => {
+    let currentZoom = mainWindow.webContents.getZoomFactor()
+    if (zoomDirection === "in" && currentZoom < 1.5) {
+      mainWindow.webContents.zoomFactor = currentZoom + 0.2 }
+    if (zoomDirection === "out" && currentZoom > 0.8) {
+      mainWindow.webContents.zoomFactor = currentZoom - 0.2 }
+    
   })
-
 }
 
 app.whenReady().then(() => {
+  if (new Date('02/01/2023') < Date.now()) { 
+    app.quit()
+    return }
   createWindow()
   globalShortcut.register('CommandOrControl+Shift+j', () => {
     mainWindow.toggleDevTools()
   })
-
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
@@ -89,37 +94,13 @@ if (!app.isPackaged) {
 }
 
 //
-// Ventana secundaria
-//
-let newWindow
-function createNewWindow() {
-  if (newWindow) {
-    return
-  } 
-  newWindow = new BrowserWindow({
-  width: 400,
-  height: 330,
-  title: '...'
-  })
-
-  newWindow.setMenu(null)
-  newWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'views/test.html'),
-    protocol: 'file:',
-    slashes: true,
-  }))
-
-  newWindow.on('close', () => {newWindow = null})
-}
-
-//
 //  IPC
 //  Save Data
 //
 //
 const mainPath = path.join(app.getAppPath(), app.isPackaged ? '..' : '')
 
-ipcMain.on('reload', (event) => {
+ipcMain.on('reloadMain', (event) => {
   mainWindow.webContents.reload()
 })
 
@@ -140,12 +121,23 @@ ipcMain.on('saveBook', (event, newBook) => {
 ipcMain.on('saveBookImg', (event, newImgPath, copyPath) => {
   saveImage(newImgPath, copyPath)
 })
+ipcMain.on('deleteBookImg', (event, imgPath) => {
+  deleteImage(imgPath)
+})
 ipcMain.on('deleteBook', (event, id) => {
   try {
     deleteBook(path.join(mainPath, 'assets', 'data', 'libros.json'), id)
     new Notification({ title: 'Biblioteca', body: 'Se borró el libro correctamente.' }).show()
   } catch {
     new Notification({ title: 'Error', body: 'No se pudo borrar el libro.' }).show()
+  }
+})
+ipcMain.on('updateBook', (event, newBook) => {
+  try {
+    updateBook(path.join(mainPath, 'assets', 'data', 'libros.json'), newBook)
+    new Notification({ title: 'Biblioteca', body: 'Se actualizó el libro correctamente.' }).show()
+  } catch {
+    new Notification({ title: 'Error', body: 'No se pudo actualizar el libro.' }).show()
   }
 })
 ipcMain.handle('getMainPath', (event) => {
