@@ -1,7 +1,7 @@
 const fs = require("fs")
-const path = require('path')  
+const path = require('path')
 
-async function updateBook(dataPath, newBook){
+async function updateBook(dataPath, newBook) {
   let data = JSON.parse(fs.readFileSync(dataPath))
   let index = data['books'].findIndex(book => book.id == newBook.id);
   data['books'].splice(index, 1, newBook);

@@ -1,6 +1,6 @@
 const { Notification } = require('electron')
 const fs = require("fs")
-const path = require('path')  
+const path = require('path')
 
 async function deleteBook(dataPath, id) {
   let data = JSON.parse(fs.readFileSync(dataPath))
@@ -10,7 +10,6 @@ async function deleteBook(dataPath, id) {
 
   fs.writeFile(dataPath, newData, (err) => {
     if (err) {
-      throw err
     }
   })
 }

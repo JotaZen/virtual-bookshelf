@@ -1,12 +1,14 @@
 .update_book_body {
   padding: 10px 25px 0px 25px;
 }
+
 .update_book:hover {
   transition: transform .1s;
   cursor: pointer;
   transform: scale(1.05);
   z-index: 20;
 }
+
 .image-preview {
   background-color: var(--my-white);
   padding: 5px;
@@ -15,12 +17,14 @@
   justify-content: center;
   align-items: center;
 }
+
 .image-preview img {
   margin: 0;
   padding: 0;
   border-radius: 10px;
   border: 1px var(--secondary-color) solid;
 }
+
 .image-preview {
   position: relative;
   display: flex;
@@ -36,6 +40,7 @@
   top: 0;
   right: 0;
 }
+
 .confirm_delete {
   display: flex;
   justify-content: space-between;

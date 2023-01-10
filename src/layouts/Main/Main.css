@@ -4,7 +4,7 @@
   --third-color: #272932;
   --fourth-color: #828489;
   --fifth-color: #B6C2D9;
-  --fourth-color-background: #9e90a24f;
+  --fourth-color-background: #9e90a224;
   --placeholder: #9E90A2;
   --my-white: #fff;
   --my-black: rgb(18, 18, 18);
@@ -12,40 +12,47 @@
   --main-font-color: #fff;
   --selected-items: #B6C2D9;
 }
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Verdana' !important;
 }
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--my-white);
 }
+
 ::-webkit-scrollbar {
-  background-color: var(--my-white);
-  width: 20px;             
+  background-color: transparent;
+  width: 20px;
+  border: 1px var(--secondary-color) solid;
 }
+
 ::-webkit-scrollbar-thumb {
-  background-color: var(--my-white);   
-  border-radius: 5px;   
-  cursor: grab; 
+
+  background-color: var(--main-color);
+  cursor: grab;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--my-white);
+  background: var(--secondary-color);
 
 }
-.margin_body{
+
+.margin_body {
   padding-top: 70px;
 }
+
 .book_grid {
   display: flex;
   flex-flow: nowrap column;
 }
+
 .flex-centered {
-  display: flex; 
+  display: flex;
   justify-content: center;
 }

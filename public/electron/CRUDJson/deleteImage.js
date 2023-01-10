@@ -1,10 +1,9 @@
 const fs = require("fs")
-const path = require('path')  
+const path = require('path')
 
-async function deleteImage(pathToImage){
+async function deleteImage(pathToImage) {
   fs.unlink(pathToImage, (err) => {
     if (err) {
-      throw err
     }
   })
 }

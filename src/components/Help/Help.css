@@ -1,0 +1,11 @@
+.help_info {
+  margin: 10px 10vw;
+}
+.info_container {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+}
+.load_data {
+  flex-flow: row
+}

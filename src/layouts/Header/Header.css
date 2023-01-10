@@ -1,6 +1,12 @@
 .nav_bar {
-    position: fixed;
-    width: 100vw;
-    background-color: var(--main-color);
-    z-index: 50;
+  position: fixed;
+  width: 100vw;
+  max-height: 20vh;
+  background-color: var(--main-color);
+  z-index: 50;
+}
+
+.nav_container {
+  margin-left: 10px;
+  gap: 10px;
 }

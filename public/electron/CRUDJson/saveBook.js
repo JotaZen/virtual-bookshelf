@@ -1,7 +1,7 @@
 const fs = require("fs")
-const path = require('path')  
+const path = require('path')
 
-async function saveBook(dataPath, newBook){
+async function saveBook(dataPath, newBook) {
   let data = JSON.parse(fs.readFileSync(dataPath))
   data['books'].push(newBook)
 

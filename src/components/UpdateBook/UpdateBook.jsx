@@ -43,20 +43,22 @@ class UpdateBook extends React.Component {
   }
 
   handleImgChange = (event) => {
-    this.setState({ 
-      imagePath: event.target.files[0].path, 
+    this.setState({
+      imagePath: event.target.files[0].path,
       imageHasChanged: true,
       formIsValid:
-        !!(this.state.newData.titulo) })
+        !!(this.state.newData.titulo)
+    })
   }
 
   handleImgDelete = (event) => {
     document.getElementById('image_input').value = null
-    this.setState({ 
-      imagePath: null, 
+    this.setState({
+      imagePath: null,
       imageHasChanged: true,
       formIsValid:
-      !!(this.state.newData.titulo) })
+        !!(this.state.newData.titulo)
+    })
   }
 
   confirmDelete = () => {
@@ -68,34 +70,36 @@ class UpdateBook extends React.Component {
   deleteBook = async () => {
     window.electron.CRUD.deleteBook(this.state.newData.id)
     window.electron.main.reload()
-  } 
+  }
 
   updateBook = async () => {
     if (!this.state.formIsValid) { return }
     const { newData, imageHasChanged } = this.state
     newData.estado = document.getElementById('select_estado').value
 
-    if (newData.titulo === 'NO GUARDAR') { 
-      return 
+    if (newData.titulo === 'NO GUARDAR') {
+      return
     } else if (newData.image_src && !this.state.imagePath) {
       newData.image_src = ''
     }
     console.log(newData)
-  
+
     //Imagen
     if (newData.image_src && imageHasChanged) {
       window.electron.CRUD.deleteBookImg(
-        path.join(await window.electron.main.getImgPath(),'books',`${newData.id}.png`)
+        path.join(await window.electron.main.getImgPath(), 'books', `${newData.id}.png`)
       )
-      window.electron.CRUD.saveBookImg(
-        this.state.imagePath, 
-        path.join(await window.electron.main.getImgPath(),'books',`${newData.id}.png`)
-      )
+      if (this.state.imagePath) {
+        window.electron.CRUD.saveBookImg(
+          this.state.imagePath,
+          path.join(await window.electron.main.getImgPath(), 'books', `${newData.id}.png`)
+        )
+      }
     } else if (!(newData.image_src) && imageHasChanged && this.state.imagePath) {
       newData.image_src = `${newData.id}.png`
       window.electron.CRUD.saveBookImg(
-        this.state.imagePath, 
-        path.join(await window.electron.main.getImgPath(),'books',`${newData.id}.png`)
+        this.state.imagePath,
+        path.join(await window.electron.main.getImgPath(), 'books', `${newData.id}.png`)
       )
     }
     window.electron.CRUD.updateBook(newData)
@@ -238,37 +242,37 @@ class UpdateBook extends React.Component {
           </Button>
           <Button variant="primary" onClick={() => {
             this.updateBook()
-            }}
+          }}
             disabled={!this.state.formIsValid}>
             Actualizar
           </Button>
           <Button variant="secondary" onClick={this.handleClose}>
             Cancelar
           </Button>
-          
-          {      
-          this.state.confirmDelete && 
-          <Modal  
-            onHide={this.cancelDelete} 
-            show={this.state.confirmDelete} 
-            dialogClassName="modal-xs"
-          >
-            <Modal.Header onHide={this.handleClose} closeButton>
-              <Modal.Title>
-                ¿Eliminar libro n°{this.state.newData.id}?
-              </Modal.Title>
-            </Modal.Header>
 
-            <Modal.Body className='confirm_delete'>
-              <Button variant="primary" onClick={this.deleteBook}>
-                Confirmar
-              </Button>
-              
-              <Button variant="secondary" onClick={this.cancelDelete}>
-                Cancelar
-              </Button>
-            </Modal.Body>
-          </Modal>
+          {
+            this.state.confirmDelete &&
+            <Modal
+              onHide={this.cancelDelete}
+              show={this.state.confirmDelete}
+              dialogClassName="modal-xs"
+            >
+              <Modal.Header onHide={this.handleClose} closeButton>
+                <Modal.Title>
+                  ¿Eliminar libro n°{this.state.newData.id}?
+                </Modal.Title>
+              </Modal.Header>
+
+              <Modal.Body className='confirm_delete'>
+                <Button variant="primary" onClick={this.deleteBook}>
+                  Confirmar
+                </Button>
+
+                <Button variant="secondary" onClick={this.cancelDelete}>
+                  Cancelar
+                </Button>
+              </Modal.Body>
+            </Modal>
           }
 
         </Modal.Footer>

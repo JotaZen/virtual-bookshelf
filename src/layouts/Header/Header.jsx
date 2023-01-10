@@ -5,25 +5,42 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 
 import AddBook from '../../components/AddBook/AddBook'
+import BooksGrid from '../BookGrid/GridBook'
+import Help from '../../components/Help/Help'
 
 class Header extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      showGrid: true,
+      showHelp: false
     }
+  }
+  showGrid = () => {
+    this.setState({ showGrid: true, showHelp: false })
+  }
+  showHelp = () => {
+    this.setState({ showHelp: true, showGrid: false })
   }
 
   render() {
     return (
-      <Navbar variant="dark" className='nav_bar'>
-        <Container>
-          <Navbar.Brand>Raúl Espinoza</Navbar.Brand>
-          <Nav className="me-auto">
-            <AddBook/>
-            <Nav.Link>Mi Biblioteca</Nav.Link>
-          </Nav>
-        </Container>
-      </Navbar>
+      <>
+        <Navbar variant="dark" className='nav_bar'>
+          <Container className='header_container'>
+            <Navbar.Brand>Raúl Espinoza</Navbar.Brand>
+            <Nav className="me-auto nav_container">
+              <Nav.Link className='add_book' onClick={this.showGrid}>Mi Biblioteca</Nav.Link>
+              <AddBook />
+              <Nav.Link className='add_book' onClick={this.showHelp}>Información</Nav.Link>
+            </Nav>
+          </Container>
+        </Navbar>
+        <div className='margin_body'></div>
+
+        {this.state.showGrid && <BooksGrid />}
+        {this.state.showHelp && <Help />}
+      </>
     )
   }
 }

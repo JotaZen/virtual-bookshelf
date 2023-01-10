@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld('electron', {
       return mainPath
     },
     async getImgPath(folder = "") {
-      let img = await ipcRenderer.invoke('getImgPath',folder)
+      let img = await ipcRenderer.invoke('getImgPath', folder)
       return img
     },
     reload: () => {
@@ -26,23 +26,34 @@ contextBridge.exposeInMainWorld('electron', {
   },
   CRUD: {
     async retrieveBooks(filterCallback) {
-      let data = await ipcRenderer.invoke('retrieveBooks',filterCallback)
+      let data = await ipcRenderer.invoke('retrieveBooks', filterCallback)
       return data
     },
     saveBook: async (newBook) => {
-      ipcRenderer.send('saveBook',newBook)
+      ipcRenderer.send('saveBook', newBook)
     },
     updateBook: async (newBook) => {
-      ipcRenderer.send('updateBook',newBook)
+      ipcRenderer.send('updateBook', newBook)
     },
     deleteBookImg: async (imgPath) => {
       ipcRenderer.send('deleteBookImg', imgPath)
     },
     saveBookImg: async (newImgPath, copyPath) => {
-      ipcRenderer.send('saveBookImg',newImgPath, copyPath)
+      ipcRenderer.send('saveBookImg', newImgPath, copyPath)
     },
     deleteBook: async (id) => {
-      ipcRenderer.send('deleteBook',id)
+      ipcRenderer.send('deleteBook', id)
+    }
+  },
+  experimental: {
+    overWriteData: async (newDataPath) => {
+      ipcRenderer.send('overWriteData', newDataPath)
+    },
+    saveImageData: async (newFolder) => {
+      ipcRenderer.send('saveImageData', newFolder)
+    },
+    loadImageData: async (folder) => {
+      ipcRenderer.send('loadImageData', folder)
     }
   }
 })

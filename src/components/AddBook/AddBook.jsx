@@ -67,9 +67,9 @@ class AddBook extends React.Component {
     window.electron.CRUD.retrieveBooks().then(booksData => {
       const ids = booksData.map(book => book.id)
       if (ids.length > 2) {
-        formData.id = ids.reduce((max, val) => max > val ? max : val) + 1 
+        formData.id = parseInt(ids.reduce((max, val) => max > val ? max : val)) + 1 
       } else {
-        formData.id = ids.length + 1
+        formData.id = parseInt(ids.sort().slice(-1)) + 1
       }
     })
     const newImagePath = path.join(
