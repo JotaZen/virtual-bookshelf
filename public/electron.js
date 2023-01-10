@@ -46,7 +46,7 @@ const createWindow = () => {
   mainWindow.webContents
     .setVisualZoomLevelLimits(1, 1.5)
     .catch((err) => console.log(err))
-  mainWindow.webContents.zoomFactor = 1
+  mainWindow.webContents.zoomFactor = 1.2
   mainWindow.webContents.on("zoom-changed", (event, zoomDirection) => {
     let currentZoom = mainWindow.webContents.getZoomFactor()
     if (zoomDirection === "in" && currentZoom < 1.5) {

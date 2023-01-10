@@ -4,7 +4,7 @@ const path = require('path')
 
 async function deleteBook(dataPath, id) {
   let data = JSON.parse(fs.readFileSync(dataPath))
-  data = data.filter(book => book.id !== id)
+  data['books'] = data['books'].filter(book => book.id !== id)
 
   const newData = JSON.stringify(data, null, 2)
 

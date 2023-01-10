@@ -3,7 +3,7 @@ const path = require('path')
 
 async function saveBook(dataPath, newBook){
   let data = JSON.parse(fs.readFileSync(dataPath))
-  data.push(newBook)
+  data['books'].push(newBook)
 
   const newData = JSON.stringify(data, null, 2)
 

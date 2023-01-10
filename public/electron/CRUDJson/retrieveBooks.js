@@ -4,7 +4,7 @@ const path = require('path')
 
 async function retrieveBooks(dataPath){
   let data = JSON.parse(fs.readFileSync(dataPath))
-  return data
+  return data['books']
 }
 
 module.exports = { retrieveBooks }
