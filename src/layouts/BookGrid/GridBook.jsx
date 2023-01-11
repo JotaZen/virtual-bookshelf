@@ -13,7 +13,7 @@ class BooksGrid extends React.Component {
       currentPage: 1,
       booksData: null,
       imgPath: null,
-      maxItemsPage: 20,
+      maxItemsPage: 24,
       maxTitleLength: 50,
       searchTerm: '',
       showBook: false,

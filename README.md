@@ -1,27 +1,10 @@
-# Jordy Zenteno Salazar 
+# Jordy Zenteno 
 
-## Virtual Bookshelf 2023
+## Virtual Bookshelf 2023 v1.0.0
 
-## To do:
+# First functional version. App aimed for windows, created with Electron JS as Backend and React as frontend, using React Boostrap for quick styles implementation.
 
-• Definir modelo de guardado de información DONE
+# 'npm start' to run React on Localhost, 'npm run electron' to load app.
 
-• Definir entorno de desarrollo y producción DONE
+# To deploy, firt run 'npm run build', after that run 'npm run package'
 
-• Grid de los últimos libros añadidos DONE
-
-• Botón de ordenar por fecha o título
-
-• Edición 
-
-• Buscador en tiempo real de los elementos, que actualice un componente cada vez que se teclea DONE
-
-• Copia de seguridad (enviar json)
-
-•
-
-•
-
-•
-
-•

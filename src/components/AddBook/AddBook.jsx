@@ -97,7 +97,7 @@ class AddBook extends React.Component {
     const { formData, formIsValid } = this.state
     return (
       <>
-        <Nav.Link onClick={this.handleShow} className='add_book'>Ingresar Libro</Nav.Link>
+        <Nav.Link onClick={this.handleShow} className='add_book'>Ingresar</Nav.Link>
 
         <Modal
           show={this.state.show}

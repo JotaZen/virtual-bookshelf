@@ -62,10 +62,10 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
-  if (new Date('02/01/2023') < Date.now()) {
-    app.quit()
-    return
-  }
+  // if (new Date('02/01/2023') < Date.now()) {
+  //   app.quit()
+  //   return
+  // }
   createWindow()
   globalShortcut.register('CommandOrControl+Shift+j', () => {
     mainWindow.toggleDevTools()

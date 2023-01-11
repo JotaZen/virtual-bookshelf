@@ -9,3 +9,7 @@
 .load_data {
   flex-flow: row
 }
+
+.help_info {
+  background-color: transparent;
+}

@@ -79,9 +79,7 @@ class UpdateBook extends React.Component {
 
     if (newData.titulo === 'NO GUARDAR') {
       return
-    } else if (newData.image_src && !this.state.imagePath) {
-      newData.image_src = ''
-    }
+    } 
     console.log(newData)
 
     //Imagen
@@ -94,6 +92,8 @@ class UpdateBook extends React.Component {
           this.state.imagePath,
           path.join(await window.electron.main.getImgPath(), 'books', `${newData.id}.png`)
         )
+      } else {
+        newData.image_src = ''
       }
     } else if (!(newData.image_src) && imageHasChanged && this.state.imagePath) {
       newData.image_src = `${newData.id}.png`
@@ -102,15 +102,17 @@ class UpdateBook extends React.Component {
         path.join(await window.electron.main.getImgPath(), 'books', `${newData.id}.png`)
       )
     }
+    console.log(newData)
     window.electron.CRUD.updateBook(newData)
     window.electron.main.reload()
   }
 
   render() {
+    console.log(this.state.imagePath)
     return (
       <>
         <Modal.Header onHide={this.handleClose} closeButton>
-          <Modal.Title>Ingresar Libro</Modal.Title>
+          <Modal.Title>Editando: {this.state.newData.titulo}</Modal.Title>
         </Modal.Header>
         <Modal.Body className='update_book_body'>
           <Form>

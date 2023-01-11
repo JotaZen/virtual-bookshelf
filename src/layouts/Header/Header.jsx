@@ -30,7 +30,7 @@ class Header extends React.Component {
           <Container className='header_container'>
             <Navbar.Brand>Raúl Espinoza</Navbar.Brand>
             <Nav className="me-auto nav_container">
-              <Nav.Link className='add_book' onClick={this.showGrid}>Mi Biblioteca</Nav.Link>
+              <Nav.Link className='add_book' onClick={this.showGrid}>Biblioteca</Nav.Link>
               <AddBook />
               <Nav.Link className='add_book' onClick={this.showHelp}>Información</Nav.Link>
             </Nav>

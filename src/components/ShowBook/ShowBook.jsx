@@ -49,11 +49,10 @@ class ShowBook extends React.Component {
     }
     let { bookData, editMode } = this.state
     let imgPath
-    try {
-      imgPath = path.join(this.state.imgPath, 'books', this.state.bookData.image_src)
-    } catch {
-      imgPath = ''
-    }
+
+    imgPath = this.state.bookData.image_src ?
+      path.join(this.state.imgPath, 'books', this.state.bookData.image_src) : ''
+
 
     return (
       <Modal show={this.state.show}

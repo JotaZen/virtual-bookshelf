@@ -1,5 +1,5 @@
 :root {
-  --grid-width: 12.6rem;
+  --grid-width: 13rem;
 }
 
 .book_grid_menu {
@@ -14,7 +14,7 @@
   margin-bottom: 10px;
   display: grid;
   grid-template-columns: repeat(6, var(--grid-width));
-  grid-gap: 10px;
+  grid-gap: 5px;
 }
 
 .book_grid_container * {
@@ -77,9 +77,10 @@ div.book_grid_item:hover .card_images {
 
 .card_images {
   object-fit: cover;
+  object-position: top;
   background-position: top;
   width: calc(var(--grid-width)-1px);
-  height: 220px;
+  height: 310px;
   background-color: var(--fourth-color-background);
 }
 
@@ -185,19 +186,19 @@ div.book_grid_item:hover .card_images {
   }
 }
 
-@media (max-width: 1060px) {
+@media (max-width: 1100px) {
   .book_grid_container {
     grid-template-columns: repeat(4, var(--grid-width));
   }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 900px) {
   .book_grid_container {
     grid-template-columns: repeat(3, var(--grid-width));
   }
 }
 
-@media (max-width: 660px) {
+@media (max-width: 700px) {
   .book_grid_container {
     grid-template-columns: repeat(2, var(--grid-width));
   }
