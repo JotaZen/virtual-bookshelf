@@ -1,6 +1,6 @@
 {
   "name": "biblioteca-virtual",
-  "version": "1.0.0",
+  "version": "v1.0.1",
   "private": true,
   "author": "Jordy Zenteno",
   "description": "Virtual bookshelf",
@@ -13,8 +13,7 @@
     "eject": "react-scripts eject",
     "electron": "set ELECTRON_START_URL=http://localhost:3000 && electron .",
     "package": "electron-builder build --win -c.extraMetadata.main=build/electron.js --publish never",
-    "publish": "electron-builder build --win --publish always",
-    "make": "electron-forge make"
+    "publish": "electron-builder build --win --publish always"
   },
   "build": {
     "appId": "BibliotecaVirtual",

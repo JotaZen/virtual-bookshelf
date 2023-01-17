@@ -41,7 +41,7 @@ div.book_grid_item:hover .card_images {
 .card_body {
   padding-top: 5px;
   background-color: var(--third-color);
-  color: var(--main-font-color);
+  color: var(--my-white);
   border: 1px var(--fourth-color) solid;
   border-radius: 0px 0px 5px 5px;
   display: flex;

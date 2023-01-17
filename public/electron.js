@@ -164,3 +164,7 @@ ipcMain.on('loadImageData', (event, folder) => {
   loadImageData(folder)
 })
 
+ipcMain.handle('getVersion', (event) => {
+  const version = app.getVersion()
+  return version
+})

@@ -12,7 +12,7 @@ class Help extends React.Component {
       newDataPath: null,
       newData: false,
       confirmDelete: false,
-
+      version: ''
     }
   }
 
@@ -25,6 +25,11 @@ class Help extends React.Component {
       })
     }
     )
+    window.electron.main.getVersion().then(version => {
+      this.setState({
+        version: version
+      })
+    })
   }
 
   downloadFile = async () => {
@@ -64,7 +69,7 @@ class Help extends React.Component {
         <Alert variant='info' className='help_info'>
           <h3>Contacto: jordyzen@gmail.com</h3>
           <br />
-          <h4>Biblioteca Virtual v1.0.0</h4>
+          <h4>Biblioteca Virtual {this.state.version}</h4>
           <p>
             Instalación realizada en {this.state.mainPath}.
           </p>

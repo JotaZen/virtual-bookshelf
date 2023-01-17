@@ -14,7 +14,11 @@ contextBridge.exposeInMainWorld('electron', {
     },
     reload: () => {
       ipcRenderer.send('reloadMain')
-    }
+    },    
+    async getVersion() {
+      let version = await ipcRenderer.invoke('getVersion')
+      return version
+    },
   },
   notificationApi: {
     sendNotification(message) {
