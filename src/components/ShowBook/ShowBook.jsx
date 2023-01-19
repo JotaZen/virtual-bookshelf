@@ -48,11 +48,12 @@ class ShowBook extends React.Component {
       return null;
     }
     let { bookData, editMode } = this.state
-    let imgPath
 
-    imgPath = this.state.bookData.image_src ?
+    const imgPath = this.state.bookData.image_src ?
       path.join(this.state.imgPath, 'books', this.state.bookData.image_src) : ''
 
+    const bgPath = this.state.bookData.image_src ?
+      path.join(this.state.imgPath, 'misc', 'background.jpg') : ''
 
     return (
       <Modal show={this.state.show}
@@ -64,14 +65,7 @@ class ShowBook extends React.Component {
             N°: {bookData.id}
           </Modal.Header>
           <Modal.Body className='show_book_body'>
-            <h1>"{bookData.titulo}"</h1>
-            <p className='show_autor'>
-              {
-                bookData.autor &&
-                `${bookData.autor}`
-              }
-            </p>
-            <hr />
+
             <Row>
               {bookData.image_src &&
                 <Col className='show_col_1'>
@@ -84,27 +78,37 @@ class ShowBook extends React.Component {
                   />
                 </Col>}
               {
-                (bookData.estado || bookData.editorial || bookData.ano_edicion || bookData.descripcion) &&
-                <Col className='show_col_2' xs={12} md={8}>
-
-                  <h4 className='show_edicion'>
+                (bookData.editorial || bookData.ano_edicion || bookData.descripcion) &&
+                <Col className='show_col_2' xs={8} md={8}>
+                  <h2>{bookData.titulo}</h2>
+                  <p className='show_autor'>
+                    {
+                      bookData.autor &&
+                      `${bookData.autor}`
+                    }
+                  </p>
+                  <hr className='separator-hr' />
+                  <h5 className='show_edicion'>
                     {(
                       (bookData.editorial && bookData.ano_edicion) &&
-                      `Edición: ${bookData.editorial}, ${bookData.ano_edicion}.`
+                      `${bookData.editorial}, ${bookData.ano_edicion}.`
                     ) ||
                       ((!bookData.editorial && bookData.ano_edicion) &&
                         `${bookData.ano_edicion}.`
                       ) ||
                       ((bookData.editorial && !bookData.ano_edicion) &&
-                        `Edición: ${bookData.editorial}.`
+                        `${bookData.editorial}.`
                       )}
-                  </h4>
-                  {bookData.estado &&
-                    <h5>{bookData.estado}</h5>
-                  }
+                  </h5>
+                  <h2 />
                   {bookData.descripcion &&
                     <p className='show_descripcion'>
                       {bookData.descripcion}
+                    </p>
+                  }
+                  {bookData.fecha_ingreso &&
+                    <p className='show_descripcion'>
+                      Añadido el {bookData.fecha_ingreso}
                     </p>
                   }
                 </Col>
@@ -112,11 +116,9 @@ class ShowBook extends React.Component {
             </Row>
           </Modal.Body>
           <Modal.Footer>
-
             <Button
-              variant="secondary"
+              variant="primary"
               onClick={this.handleEditModeShow}
-              className="show_edit_button"
             >
               Editar
             </Button>

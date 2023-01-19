@@ -17,6 +17,7 @@ class UpdateBook extends React.Component {
     super(props)
     this.state = {
       newData: this.props.formData,
+      title: this.props.formData.titulo,
       imagePath: this.props.image,
       formIsValid: false,
       onClose: this.props.onClose,
@@ -75,11 +76,10 @@ class UpdateBook extends React.Component {
   updateBook = async () => {
     if (!this.state.formIsValid) { return }
     const { newData, imageHasChanged } = this.state
-    newData.estado = document.getElementById('select_estado').value
 
     if (newData.titulo === 'NO GUARDAR') {
       return
-    } 
+    }
     console.log(newData)
 
     //Imagen
@@ -112,7 +112,7 @@ class UpdateBook extends React.Component {
     return (
       <>
         <Modal.Header onHide={this.handleClose} closeButton>
-          <Modal.Title>Editando: {this.state.newData.titulo}</Modal.Title>
+          <Modal.Title>Editando: {this.state.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body className='update_book_body'>
           <Form>
@@ -129,10 +129,8 @@ class UpdateBook extends React.Component {
                 defaultValue={this.state.newData.titulo}
               />
             </Form.Group>
-
             <Row>
               <Col>
-
                 <Form.Group className="mb-3">
                   <Form.Label>Autor</Form.Label>
                   <Form.Control
@@ -143,8 +141,9 @@ class UpdateBook extends React.Component {
                     defaultValue={this.state.newData.autor ? this.state.newData.autor : ''}
                   />
                 </Form.Group>
-
               </Col>
+            </Row>
+            <Row>
               <Col>
 
                 <Form.Group className="mb-3">
@@ -159,8 +158,6 @@ class UpdateBook extends React.Component {
                 </Form.Group>
 
               </Col>
-            </Row>
-            <Row>
               <Col>
 
                 <Form.Group className="mb-3">
@@ -172,24 +169,6 @@ class UpdateBook extends React.Component {
                     onChange={this.handleChange}
                     defaultValue={this.state.newData.ano_edicion ? this.state.newData.ano_edicion : ''}
                   />
-                </Form.Group>
-
-              </Col>
-              <Col>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Estado</Form.Label>
-                  <Form.Select
-                    aria-label='Selección estado'
-                    name="estado"
-                    id='select_estado'
-                    onChange={this.handleChange}
-                    defaultValue={this.state.newData.estado}
-                  >
-                    <option value='Disponible'>Disponible</option>
-                    <option value='Prestado'>Prestado</option>
-                    <option value='Perdido'>Perdido</option>
-                  </Form.Select>
                 </Form.Group>
 
               </Col>
@@ -220,14 +199,14 @@ class UpdateBook extends React.Component {
                       X
                     </button>
                     <Card.Img variant="top" src={this.state.imagePath}
-                      className='card_images flex-centered' alt='portada' />
+                      className='show_image flex-centered' alt='portada' />
                   </Alert>
                 </Col>
               }
             </Row>
 
             <Form.Group className="mb-3">
-              <Form.Label>Descripción</Form.Label>
+              <Form.Label>Detalles</Form.Label>
               <Form.Control as="textarea" rows={3}
                 name='descripcion'
                 placeholder='...'
@@ -239,7 +218,7 @@ class UpdateBook extends React.Component {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={this.confirmDelete}>
+          <Button variant="danger" onClick={this.confirmDelete}>
             Eliminar
           </Button>
           <Button variant="primary" onClick={() => {

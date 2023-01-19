@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, Button, Form, Modal } from 'react-bootstrap'
+import { Alert, Button, Form, Modal, Col, Row } from 'react-bootstrap'
 import './Help.css'
 import path from 'path-browserify'
 
@@ -21,7 +21,7 @@ class Help extends React.Component {
       this.setState({
         mainPath,
         dataPath: path.join(mainPath, 'assets', 'data', 'libros.json'),
-        imgPath: path.join(mainPath, 'assets', 'img', 'books')
+        imgPath: path.join(mainPath, 'assets', 'img', 'books').replaceAll('/', '\\')
       })
     }
     )
@@ -47,7 +47,7 @@ class Help extends React.Component {
   }
 
   updateFile = () => {
-    window.electron.experimental.overWriteData(this.state.newDataPath)
+    window.electron.experimental.overWriteData(this.state.newDataPath, true)
     window.electron.main.reload()
   }
   confirmDelete = () => {
@@ -71,7 +71,7 @@ class Help extends React.Component {
           <br />
           <h4>Biblioteca Virtual {this.state.version}</h4>
           <p>
-            Instalación realizada en {this.state.mainPath}.
+            Instalación realizada en {this.state.mainPath}
           </p>
           <br />
           <h5>Notas: </h5>
@@ -79,40 +79,36 @@ class Help extends React.Component {
             - El título es obligatorio para ingresar un libro.
           </p>
           <p>
-            - En la biblioteca, el círculo verde indica Disponible, rojo Perdido y azul Prestado.
-          </p>
-          <p>
             - El buscador funciona con FECHA_EDICION, AUTOR, TITULO y EDITORIAL.
-          </p>
-          <p>
-            - La portada de las imágenes no tiene compresión, evitar subir archivos pesados.
           </p>
           <p>
             - Ctrl + Girar Rueda para hacer zoom.
           </p>
           <p>
-            - Las portadas no se guardarán en el respaldo, solo la información de los libros. 
+            - Las portadas no se guardarán en el respaldo, solo la información de los libros.
             Para guardar manualmente las imágenes, revisar la siguiente carpeta {this.state.imgPath}
           </p>
-          <Button variant='primary' onClick={this.downloadFile}>
-            Descargar respaldo
-          </Button>
-          <br />
-          <br />
           <Form.Group className="mb-3 load_data">
-            <Form.Label>Cargar Datos, Selecione el archivo json y luego cargar (Eliminar todo antes de cargar datos, para evitar problemas con imágenes).</Form.Label>
+            <Form.Label>Cargar Datos, Selecione el archivo json (respaldo) y luego cargar (Eliminar todo antes de cargar datos, para evitar problemas con imágenes).</Form.Label>
+
             <Form.Control
               type="file"
               placeholder="asdasd"
               onChange={this.handleDataChange}
               accept='.json'
             />
-            <h4 />
+            <h4></h4>
             <Button disabled={!this.state.newData} onClick={this.updateFile}>
               Cargar
             </Button>
+
           </Form.Group>
           <h4 />
+          <Button variant='primary' onClick={this.downloadFile}>
+            Descargar respaldo
+          </Button>
+          <br />
+          <br />
           <Button variant='danger' onClick={this.confirmDelete}>
             Eliminar Todo
           </Button>

@@ -2,8 +2,7 @@ import React from 'react'
 import './GridBook.css'
 import path from 'path-browserify'
 
-import { Button, Card, Form, Alert, Dropdown } from 'react-bootstrap'
-
+import { Button, Card, Form, Alert, Dropdown, DropdownButton } from 'react-bootstrap'
 import ShowBook from '../../components/ShowBook/ShowBook'
 
 class BooksGrid extends React.Component {
@@ -13,8 +12,8 @@ class BooksGrid extends React.Component {
       currentPage: 1,
       booksData: null,
       imgPath: null,
-      maxItemsPage: 24,
-      maxTitleLength: 50,
+      maxItemsPage: 32,
+      maxTitleLength: 97,
       searchTerm: '',
       showBook: false,
       selectedBookId: null
@@ -59,14 +58,8 @@ class BooksGrid extends React.Component {
     let { booksData } = this.state
     booksData = booksData.sort((a, b) => {
       if (a.titulo && b.titulo &&
-        a.titulo.toLowerCase().normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, "")
-          .replace('¡', "")
-          .replace('¿', "")
-        < b.titulo.toLowerCase().normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, "")
-          .replace('¡', "")
-          .replace('¿', "")) {
+        this.rmChars(a.titulo)
+        < this.rmChars(b.titulo)) {
         return -1
       }
     })
@@ -76,14 +69,8 @@ class BooksGrid extends React.Component {
     let { booksData } = this.state
     booksData = booksData.sort((a, b) => {
       if (a.titulo && b.titulo &&
-        a.titulo.toLowerCase().normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, "")
-          .replace('¡', "")
-          .replace('¿', "")
-        > b.titulo.toLowerCase().normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, "")
-          .replace('¡', "")
-          .replace('¿', "")) {
+        this.rmChars(a.titulo)
+        > this.rmChars(b.titulo)) {
         return -1
       }
     })
@@ -108,21 +95,32 @@ class BooksGrid extends React.Component {
     this.setState({ booksData: booksData })
   }
 
+  rmChars = (word) => {
+    return word
+      .toLowerCase()
+      .normalize('NFD')
+      .replaceAll(/[\u0300-\u036f-'"\.?¿|!¡]/g, "")
+  }
+
   render() {
     const { currentPage, maxTitleLength, imgPath, searchTerm } = this.state
     let { booksData } = this.state
+    const rmChars = this.rmChars
 
     if (booksData === null) {
-      return <Alert>Cargando libros...</Alert>
+      return (
+        <Alert className='help_info'>
+          <h2>
+            Cargando...
+          </h2>
+        </Alert>
+      )
     } else if (searchTerm !== '') {
       booksData = booksData.filter(function (book) {
         return (
-          (book.titulo && book.titulo.toLowerCase().normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, "").includes(searchTerm.toLowerCase())) ||
-          (book.editorial && book.editorial.toLowerCase().normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, "").includes(searchTerm.toLowerCase())) ||
-          (book.autor && book.autor.toLowerCase().normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, "").includes(searchTerm.toLowerCase())) ||
+          (book.titulo && rmChars(book.titulo).includes(rmChars(searchTerm))) ||
+          (book.editorial && rmChars(book.editorial).includes(rmChars(searchTerm))) ||
+          (book.autor && rmChars(book.autor).includes(rmChars(searchTerm))) ||
           // eslint-disable-next-line
           (book.ano_edicion && book.ano_edicion == searchTerm)
         )
@@ -156,8 +154,8 @@ class BooksGrid extends React.Component {
                 id='search_box' value={searchTerm} onChange={this.handleFormChange}>
               </Form.Control>
             </div>
-            <Dropdown drop='down-centered' className='dropd_button'>
-              <Dropdown.Toggle className='navigation_buttons_fix' />
+            <Dropdown drop='down-centered'>
+              <Dropdown.Toggle className='dropd_button' />
               <Dropdown.Menu>
                 <Dropdown.Item onClick={this.sortAlf1}>Orden Alfabético A-Z</Dropdown.Item>
                 <Dropdown.Item onClick={this.sortAlf2}>Orden Alfabético Z-A</Dropdown.Item>
@@ -174,16 +172,26 @@ class BooksGrid extends React.Component {
                 {_}
               </Button>
             ))}
-          </div>
-
-          <div className='navigation_buttons_fix'>
-            <Button variant="primary" onClick={() => this.handlePageChange(1)} id='page_btn'>
-              Inicio
-            </Button>
-            <Button variant="primary" onClick={() => this.handlePageChange(pageCount)} id='page_btn'>
-              {pageCount}
-            </Button>
-
+            <DropdownButton
+              drop='down'
+              className='navigation_buttons_fix'
+              title='Página'
+            >
+              <div className='dropdown-menu-page'>
+                <Dropdown.Item onClick={() => this.handlePageChange(1)}>
+                  Inicio
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => this.handlePageChange(pageCount)}>
+                  Final
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                {range(1, pageCount).map((i) => (
+                  <Dropdown.Item onClick={() => this.handlePageChange(i)} key={i}>
+                    {i}
+                  </Dropdown.Item>
+                ))}
+              </div>
+            </DropdownButton>
           </div>
         </div>
 
@@ -206,25 +214,23 @@ class BooksGrid extends React.Component {
 
               <Card.Img variant="top" src={book.image_src ? path.join(imgPath, 'books', book.image_src) : ''}
                 className={book.image_src ? 'card_images' : ''}
-              // onError= {(e)=>{
-              //   e.onerror=null
-              //   e.target.src=path.join(imgPath, 'books', 'default.png')}}
               />
               <Card.Body className='card_body'>
                 <Card.Header className='card_header'>
-                  {
-                    (book.autor &&
-                      <p>
-                        {book.autor.slice(0, Math.ceil(maxTitleLength / 2))}
-                      </p>
-                    )
-                  }
-                  <span className={`status_card ${book.estado ? book.estado.toLowerCase() : ''}`}></span>
+                  <p>
+                    N° {book.id}
+                    {
+                      book.autor ?
+                        (', ' + book.autor).slice(0, Math.ceil(maxTitleLength / 3)) : ''
+                    }{
+                      book.autor && book.autor.length > Math.ceil(maxTitleLength / 3) ? '...' : ''
+                    }
+                  </p>
                 </Card.Header>
                 <Card.Title className='card_title'>
 
-                  {book.titulo ? book.titulo.slice(0, !book.image_src ? maxTitleLength : 30) : 'Sin Título'}
-                  {book.titulo && book.titulo.length > (!book.image_src ? maxTitleLength : 30) ? '...' : ''}
+                  {book.titulo ? book.titulo.slice(0, maxTitleLength) : 'Sin Título'}
+                  {book.titulo && book.titulo.length > maxTitleLength ? '...' : ''}
 
                   {(!book.image_src && book.descripcion) &&
                     <Card.Text className='card_text'>
@@ -255,18 +261,8 @@ class BooksGrid extends React.Component {
             </Card>
           ))}
         </div>
-
-        {
-          (pageCount > 1) &&
-          <div className='navigation_buttons'>
-            {buttonPages.map((_, i) => (
-              <Button variant="primary" onClick={() => this.handlePageChange(_)}
-                key={i} id={(_ === currentPage) ? 'current_page_btn' : 'page_btn'}>
-                {_}
-              </Button>
-            ))}
-          </div>
-        }
+        <hr />
+        <hr />
       </div >
     )
   }

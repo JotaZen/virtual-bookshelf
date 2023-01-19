@@ -18,12 +18,28 @@ class AddBook extends React.Component {
     super(props)
     this.state = {
       show: false,
+      id: 0,
       formData: {
         titulo: ""
       },
       imagePath: "",
       formIsValid: false
     }
+  }
+  componentDidMount = async () => {
+    let idB
+    window.electron.CRUD.retrieveBooks().then(booksData => {
+      const ids = booksData.map(book => book.id)
+      
+      if (ids.length > 2) {
+        idB = parseInt(ids.reduce((max, val) => max > val ? max : val)) + 1
+      } else {
+        idB = parseInt(ids.sort().slice(-1)) + 1
+      }
+      this.setState({ id: idB })
+    })
+    
+    
   }
   handleShow = () => {
     this.setState({ show: true })
@@ -67,7 +83,7 @@ class AddBook extends React.Component {
     window.electron.CRUD.retrieveBooks().then(booksData => {
       const ids = booksData.map(book => book.id)
       if (ids.length > 2) {
-        formData.id = parseInt(ids.reduce((max, val) => max > val ? max : val)) + 1 
+        formData.id = parseInt(ids.reduce((max, val) => max > val ? max : val)) + 1
       } else {
         formData.id = parseInt(ids.sort().slice(-1)) + 1
       }
@@ -80,8 +96,6 @@ class AddBook extends React.Component {
     if (this.state.imagePath !== '') {
       formData.image_src = newImagePath.split('/').slice(-1)[0]
     }
-    const select_estado = document.getElementById('select_estado')
-    formData.estado = select_estado.value
 
     console.log(formData)
     if (formData.titulo === 'NO GUARDAR') { return }
@@ -105,7 +119,7 @@ class AddBook extends React.Component {
           className='add_book_menu'
         >
           <Modal.Header closeButton onHide={this.handleClose}>
-            <Modal.Title>Ingresar Libro</Modal.Title>
+            <Modal.Title>Ingresar Libro n° { this.state.id }</Modal.Title>
           </Modal.Header>
           <Modal.Body className='add_book_body'>
             <Form>
@@ -133,6 +147,8 @@ class AddBook extends React.Component {
                     />
                   </Form.Group>
                 </Col>
+              </Row>
+              <Row>
                 <Col>
                   <Form.Group className="mb-3">
                     <Form.Label>Editorial</Form.Label>
@@ -144,8 +160,6 @@ class AddBook extends React.Component {
                     />
                   </Form.Group>
                 </Col>
-              </Row>
-              <Row>
                 <Col>
                   <Form.Group className="mb-3">
                     <Form.Label>Año de edición</Form.Label>
@@ -157,21 +171,8 @@ class AddBook extends React.Component {
                     />
                   </Form.Group>
                 </Col>
-                <Col>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Estado</Form.Label>
-                    <Form.Select
-                      aria-label="Selección estado"
-                      name="estado"
-                      id='select_estado'
-                    >
-                      <option value="Disponible">Disponible</option>
-                      <option value="Prestado">Prestado</option>
-                      <option value="Perdido">Perdido</option>
-                    </Form.Select>
-                  </Form.Group>
-                </Col>
               </Row>
+
               <Row>
                 <Col>
                   <Form.Group className="mb-3">
@@ -190,13 +191,13 @@ class AddBook extends React.Component {
                     <Alert variant='secondary' className='image-preview'>
                       <p>Vista Previa</p>
                       <Card.Img variant="top" src={this.state.imagePath}
-                        className='card_images flex-centered' alt='portada' />
+                        className='show_image flex-centered' alt='portada' />
                     </Alert>
                   </Col>
                 }
               </Row>
               <Form.Group className="mb-3">
-                <Form.Label>Descripción</Form.Label>
+                <Form.Label>Detalles</Form.Label>
                 <Form.Control as="textarea" rows={3}
                   name='descripcion'
                   placeholder='...'

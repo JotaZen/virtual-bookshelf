@@ -5,9 +5,13 @@
   padding: 12px 25px 20px 25px;
 }
 .show_autor {
-  font-size: 2rem;
-  font-style: italic;
-  padding-left: 10px;
+  font-size: 1.2rem;
+  color: var(--fifth-color);
+  font-weight: normal;
+  margin: 0px 0px 10px 0px;
+}
+.separator-hr{
+  margin: 0px 0px 10px 0px;
 }
 .show_image {
   margin-bottom: 15px;
@@ -54,12 +58,14 @@
   flex-flow: column;
 }
 .show_edicion {
-  font-style: italic;
+  color: var(--fifth-color);
+  font-size: 1.2rem;
+  font-weight: normal;
 }
 .show_descripcion {
   padding: 5px;
   text-align: justify;
-
+  font-size: 1rem;
 }
 .show_close_button {
   background-color: var(--third-color);

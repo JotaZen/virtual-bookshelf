@@ -1,4 +1,3 @@
-const { Notification } = require('electron')
 const fs = require("fs")
 const path = require('path')
 
@@ -11,7 +10,7 @@ async function overWriteData(source, destiny, dirToClear) {
         throw err
       }
     })
-    await fs.rmdir(dirToClear, { recursive: true, force: true }, (err) => {
+    await fs.rm(dirToClear, { recursive: true, force: true }, (err) => {
       if (err) {
         throw err
       } else {
@@ -26,6 +25,8 @@ async function overWriteData(source, destiny, dirToClear) {
   else {
     throw 'Not Valid File'
   }
+
 }
+
 
 module.exports = { overWriteData }

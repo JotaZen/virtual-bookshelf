@@ -13,6 +13,7 @@ const { updateBook } = require('./electron/CRUDJson/updateBook.js')
 const { overWriteData } = require('./electron/windows/overWriteData.js')
 const { saveImageData } = require('./electron/windows/saveImageData.js')
 const { loadImageData } = require('./electron/windows/loadImageData.js')
+const { clearImages } = require('./electron/windows/clearImages.js')
 //
 // Creación de pestaña principal
 //

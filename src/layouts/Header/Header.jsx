@@ -13,11 +13,16 @@ class Header extends React.Component {
     super(props)
     this.state = {
       showGrid: true,
-      showHelp: false
+      showHelp: false,
+      reset: 0
     }
   }
   showGrid = () => {
-    this.setState({ showGrid: true, showHelp: false })
+    this.setState({ 
+      showGrid: true, 
+      showHelp: false, 
+      reset: (this.state.reset + 1) % 2
+    })
   }
   showHelp = () => {
     this.setState({ showHelp: true, showGrid: false })
@@ -38,7 +43,7 @@ class Header extends React.Component {
         </Navbar>
         <div className='margin_body'></div>
 
-        {this.state.showGrid && <BooksGrid />}
+        {this.state.showGrid && <BooksGrid key={this.state.reset}/>}
         {this.state.showHelp && <Help />}
       </>
     )
