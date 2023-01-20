@@ -52,7 +52,7 @@ class BooksGrid extends React.Component {
     this.setState({ showBook: false, selectedBookId: null })
   }
   //
-  // OPTIMIZAR, HECHO A ULTIMA HORA
+  // OPTIMIZAR
   //
   sortAlf1 = () => {
     let { booksData } = this.state
@@ -62,6 +62,7 @@ class BooksGrid extends React.Component {
         < this.rmChars(b.titulo)) {
         return -1
       }
+      return 0
     })
     this.setState({ booksData: booksData })
   }
@@ -73,6 +74,7 @@ class BooksGrid extends React.Component {
         > this.rmChars(b.titulo)) {
         return -1
       }
+      return 0
     })
     this.setState({ booksData: booksData })
   }
@@ -82,6 +84,7 @@ class BooksGrid extends React.Component {
       if (a.id < b.id) {
         return -1
       }
+      return 0
     })
     this.setState({ booksData: booksData })
   }
@@ -91,6 +94,7 @@ class BooksGrid extends React.Component {
       if (a.id > b.id) {
         return -1
       }
+      return 0
     })
     this.setState({ booksData: booksData })
   }
@@ -99,7 +103,7 @@ class BooksGrid extends React.Component {
     return word
       .toLowerCase()
       .normalize('NFD')
-      .replaceAll(/[\u0300-\u036f-'"\.?¿|!¡]/g, "")
+      .replaceAll(/[\u0300-\u036f-'".?¿|!¡]/g, "")
   }
 
   render() {
@@ -121,8 +125,8 @@ class BooksGrid extends React.Component {
           (book.titulo && rmChars(book.titulo).includes(rmChars(searchTerm))) ||
           (book.editorial && rmChars(book.editorial).includes(rmChars(searchTerm))) ||
           (book.autor && rmChars(book.autor).includes(rmChars(searchTerm))) ||
-          // eslint-disable-next-line
-          (book.ano_edicion && book.ano_edicion == searchTerm)
+          (book.ano_edicion && book.ano_edicion == searchTerm) || 
+          (book.id == searchTerm)
         )
       })
     }

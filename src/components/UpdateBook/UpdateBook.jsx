@@ -185,7 +185,7 @@ class UpdateBook extends React.Component {
                     onChange={this.handleImgChange}
                     accept='.jpg,.jpeg,.png,.jfif,.gif,.webp,.bmp'
                   />
-                  <h6 />
+                  <br />
 
                 </Form.Group>
 

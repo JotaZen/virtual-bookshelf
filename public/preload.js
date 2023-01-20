@@ -51,7 +51,7 @@ contextBridge.exposeInMainWorld('electron', {
   },
   experimental: {
     overWriteData: async (newDataPath) => {
-      ipcRenderer.send('overWriteData', newDataPath, clearImage)
+      ipcRenderer.send('overWriteData', newDataPath)
     },
     saveImageData: async (newFolder) => {
       ipcRenderer.send('saveImageData', newFolder)

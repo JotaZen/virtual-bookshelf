@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, Button, Form, Modal, Col, Row } from 'react-bootstrap'
+import { Alert, Button, Form, Modal } from 'react-bootstrap'
 import './Help.css'
 import path from 'path-browserify'
 
@@ -79,7 +79,7 @@ class Help extends React.Component {
             - El título es obligatorio para ingresar un libro.
           </p>
           <p>
-            - El buscador funciona con FECHA_EDICION, AUTOR, TITULO y EDITORIAL.
+            - El buscador funciona con FECHA_EDICION, AUTOR, TITULO, EDITORIAL y N°LIBRO.
           </p>
           <p>
             - Ctrl + Girar Rueda para hacer zoom.
@@ -97,13 +97,12 @@ class Help extends React.Component {
               onChange={this.handleDataChange}
               accept='.json'
             />
-            <h4></h4>
+            <br />
             <Button disabled={!this.state.newData} onClick={this.updateFile}>
               Cargar
-            </Button>
-
+            </Button>  
           </Form.Group>
-          <h4 />
+    
           <Button variant='primary' onClick={this.downloadFile}>
             Descargar respaldo
           </Button>

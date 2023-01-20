@@ -52,13 +52,11 @@ class ShowBook extends React.Component {
     const imgPath = this.state.bookData.image_src ?
       path.join(this.state.imgPath, 'books', this.state.bookData.image_src) : ''
 
-    const bgPath = this.state.bookData.image_src ?
-      path.join(this.state.imgPath, 'misc', 'background.jpg') : ''
-
     return (
       <Modal show={this.state.show}
         onHide={this.handleClose}
         dialogClassName='modal-lg'
+        className='my-modal'
       >
         {!editMode && <>
           <Modal.Header className='showbook_header' closeButton>
@@ -76,9 +74,7 @@ class ShowBook extends React.Component {
                     alt='portada'
                     onClick={this.handleImgShow}
                   />
-                </Col>}
-              {
-                (bookData.editorial || bookData.ano_edicion || bookData.descripcion) &&
+                </Col>}  
                 <Col className='show_col_2' xs={8} md={8}>
                   <h2>{bookData.titulo}</h2>
                   <p className='show_autor'>
@@ -100,7 +96,7 @@ class ShowBook extends React.Component {
                         `${bookData.editorial}.`
                       )}
                   </h5>
-                  <h2 />
+                  <br />
                   {bookData.descripcion &&
                     <p className='show_descripcion'>
                       {bookData.descripcion}
@@ -112,7 +108,6 @@ class ShowBook extends React.Component {
                     </p>
                   }
                 </Col>
-              }
             </Row>
           </Modal.Body>
           <Modal.Footer>

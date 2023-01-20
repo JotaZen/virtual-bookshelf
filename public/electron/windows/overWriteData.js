@@ -10,7 +10,7 @@ async function overWriteData(source, destiny, dirToClear) {
         throw err
       }
     })
-    await fs.rm(dirToClear, { recursive: true, force: true }, (err) => {
+    fs.rm(dirToClear, { recursive: true, force: true }, (err) => {
       if (err) {
         throw err
       } else {

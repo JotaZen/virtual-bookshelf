@@ -140,7 +140,6 @@ ipcMain.on('deleteBook', (event, id) => {
 ipcMain.on('updateBook', (event, newBook) => {
   try {
     updateBook(path.join(mainPath, 'assets', 'data', 'libros.json'), newBook)
-    new Notification({ title: 'Biblioteca', body: 'Se actualizó el libro correctamente.' }).show()
   } catch {
     new Notification({ title: 'Error', body: 'No se pudo actualizar el libro.' }).show()
   }

@@ -1,6 +1,6 @@
 {
   "name": "biblioteca-virtual",
-  "version": "v1.1.0",
+  "version": "v1.1.1",
   "private": true,
   "author": "Jordy Zenteno",
   "description": "Virtual bookshelf",
@@ -17,6 +17,8 @@
   },
   "build": {
     "appId": "BibliotecaVirtual",
+    "productName": "Biblioteca Virtual",
+    "copyright": "Copyright © 2022 Jordy Zenteno",
     "extraResources": [
       "assets"
     ],

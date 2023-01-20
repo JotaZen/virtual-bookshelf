@@ -34,7 +34,7 @@ class AddBook extends React.Component {
       if (ids.length > 2) {
         idB = parseInt(ids.reduce((max, val) => max > val ? max : val)) + 1
       } else {
-        idB = parseInt(ids.sort().slice(-1)) + 1
+        idB = parseInt(ids.sort().slice(-1)) ? parseInt(ids.sort().slice(-1)) + 1 : 1
       }
       this.setState({ id: idB })
     })
@@ -85,7 +85,7 @@ class AddBook extends React.Component {
       if (ids.length > 2) {
         formData.id = parseInt(ids.reduce((max, val) => max > val ? max : val)) + 1
       } else {
-        formData.id = parseInt(ids.sort().slice(-1)) + 1
+        formData.id = parseInt(ids.sort().slice(-1)) ? parseInt(ids.sort().slice(-1)) + 1 : 1
       }
     })
     const newImagePath = path.join(
