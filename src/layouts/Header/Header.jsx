@@ -33,7 +33,7 @@ class Header extends React.Component {
       <>
         <Navbar variant="dark" className='nav_bar'>
           <Container className='header_container'>
-            <Navbar.Brand>Raúl Espinoza</Navbar.Brand>
+            <Navbar.Brand>Biblioteca</Navbar.Brand>
             <Nav className="me-auto nav_container">
               <Nav.Link className='add_book' onClick={this.showGrid}>Biblioteca</Nav.Link>
               <AddBook />
