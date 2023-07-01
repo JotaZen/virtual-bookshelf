@@ -1,4 +1,3 @@
-# Jordy Zenteno 
 ## Virtual Bookshelf 2023 v1.1.0
 Primera versión de distribución.
 
