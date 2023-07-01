@@ -38,7 +38,7 @@ const createWindow = () => {
     protocol: 'file:',
     slashes: true,
   })
-  mainWindow.setTitle('Raúl Espinoza')
+  mainWindow.setTitle('BibliotecaVirtual')
   mainWindow.loadURL(startUrl)
   Menu.setApplicationMenu(Menu.buildFromTemplate(templateMenu))
 
