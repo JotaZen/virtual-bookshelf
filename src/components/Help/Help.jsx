@@ -67,7 +67,7 @@ class Help extends React.Component {
     return (
       <div className='info_container'>
         <Alert variant='info' className='help_info'>
-          <h3>Contacto: jordyzen@gmail.com</h3>
+          <h3>Contacto: https://github.com/JotaZen</h3>
           <br />
           <h4>Biblioteca Virtual {this.state.version}</h4>
           <p>
